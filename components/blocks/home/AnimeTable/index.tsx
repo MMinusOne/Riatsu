@@ -1,4 +1,4 @@
-import Image from "next/image";
+import NextImage from "next/image";
 import { ISearch, IAnimeResult } from "@consumet/extensions";
 import { FaArrowRight, FaArrowLeft, FaLine } from "react-icons/fa";
 import { useRef } from "react";
@@ -18,16 +18,16 @@ export default function AnimeTable(props: {
 
   return (
     <>
-      <div className="flex flex-col gap-2 b">
-        <div className="flex p-4">
+      <div className="flex flex-col gap-0">
+        <div className="flex p-2">
           <p className="font-semibold text-xl">{props.title}</p>
         </div>
-        <div className="flex p-4 w-full h-72">
+        <div className="flex px-6 p-2 w-full h-72">
           <div
             className="flex gap-20 w-full h-fit overflow-hidden"
             ref={scrollRef}
           >
-            {props?.data.map((card) => {
+            {props?.data?.map((card) => {
               return <Card {...card} key={card.id} />;
             })}
           </div>
@@ -58,11 +58,11 @@ function Card(props: IAnimeResult) {
     <>
       <a
         className="relative flex flex-col w-[105px] sm:w-[135px] md:w-[155px] xl:w-[175px] h-full hover:cursor-pointer group"
-        href="/"
+        href={`/wiki/${props.id}`}
       >
-        <div className="relative rounded-xl xl:rounded-2xl w-[105px] sm:w-[135px] md:w-[155px] xl:w-[175px] h-[160px] sm:h-[190px] md:h-[230px] xl:h-[255px]">
+        <div className="relative rounded-xl xl:rounded-2xl w-[105px] sm:w-[135px] md:w-[155px] xl:w-[175px] h-[160px] sm:h-[190px] md:h-[230px] xl:h-[255px] overflow-hidden">
           <div className="flex-shrink-0 bg-[#1e1e24] shadow-[4px_0px_5px_0px_rgba(0,0,0,0.3)] rounded-xl xl:rounded-2xl w-full h-full overflow-hidden group">
-            <Image
+            <NextImage
               src={props?.image}
               alt={
                 //@ts-ignore
@@ -70,16 +70,15 @@ function Card(props: IAnimeResult) {
                 props?.id?.toString() ||
                 "Image"
               }
-              width={375}
-              height={230}
-              className="group-hover:scale-110 opacity-90 transition-transform duration-300 object-cover scale-105"
+              fill
+              className="group-hover:scale-105 opacity-90 rounded-[inherit] transition-transform duration-300 overflow-hidden object-cover"
             />
           </div>
         </div>
         <div className="w-full h-20">
           <p className="inline-block w-full h-full font-semibold text-center truncate whitespace-nowrap">
             {/**@ts-ignore */}
-            {props?.title!?.userPreferred!}
+            {props?.title!?.userPreferred! || props.title}
           </p>
         </div>
       </a>

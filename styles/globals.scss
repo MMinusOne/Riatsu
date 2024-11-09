@@ -9,3 +9,11 @@
 ::selection { 
     @apply bg-secondary opacity-60
 }
+
+
+::-webkit-scrollbar-track {
+    @apply bg-transparent;
+}
+
+
+

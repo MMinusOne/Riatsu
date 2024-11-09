@@ -1,4 +1,4 @@
-import Image from "next/image";
+import NextImage from "next/image";
 import { FaSearch, FaDiscord, FaRandom } from "react-icons/fa";
 
 export default function Header() {
@@ -7,7 +7,7 @@ export default function Header() {
       <div className="p-4 navbar">
         <div className="flex-1 gap-4">
           <a>
-            <Image
+            <NextImage
               src="/assets/logo_full.png"
               alt="Logo"
               width={142}

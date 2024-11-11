@@ -7,9 +7,10 @@ const nextConfig: NextConfig = {
       { hostname: "s4.anilist.co" },
       { hostname: "localhost" },
       { hostname: "artworks.thetvdb.com" },
-      { hostname: 'media.kitsu.app' }
-    ]
-  }
+      { hostname: "media.kitsu.app" },
+      { hostname: "mangadex.org" },
+    ],
+  },
 };
 
 export default nextConfig;

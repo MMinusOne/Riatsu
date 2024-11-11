@@ -2,24 +2,30 @@
 
 import Header from "@/components/blocks/home/Header";
 import Banner from "@/components/blocks/home/Banner";
-import AnimeTable from "../components/blocks/home/AnimeTable/index";
-import getTrending from "@/components/lib/services/getTrending";
-import getAiring from "@/components/lib/services/getAiring";
+import ContentTable from "../components/blocks/home/ContentTable/index";
+import getTrendingAnime from "@/components/lib/services/anime/getTrending";
 import { useQuery } from "@tanstack/react-query";
-import AnimeMap from "@/components/blocks/home/AnimeMap";
 import ms from "ms";
-import { IAnimeResult } from "@consumet/extensions";
+import { IAnimeResult, IMangaResult, MediaStatus } from "@consumet/extensions";
+import getTrendingManga from "@/components/lib/services/manga/getTrending";
+import getTrendingMovies from "@/components/lib/services/movies/getTrending";
 
 export default function Home() {
   const { data: trendingAnimes, isLoading: trendingAnimeLoading } = useQuery({
-    queryFn: getTrending,
-    queryKey: ["trending"],
+    queryFn: getTrendingAnime,
+    queryKey: ["trending-anime"],
     staleTime: ms("12h"),
   });
 
-  const { data: topAiringAnimes, isLoading: topAiringLoading } = useQuery({
-    queryFn: getAiring,
-    queryKey: ["airing"],
+  const { data: trendingMangas, isLoading: trendingMangaLoading } = useQuery({
+    queryFn: getTrendingManga,
+    queryKey: ["trending-manga"],
+    staleTime: ms("12h"),
+  });
+
+  const { data: trendingMovies, isLoading: trendingMoviesLoading } = useQuery({
+    queryFn: getTrendingMovies,
+    queryKey: ["trending-movies"],
     staleTime: ms("12h"),
   });
 
@@ -29,14 +35,42 @@ export default function Home() {
         <Header />
         {trendingAnimeLoading ? null : <Banner data={trendingAnimes} />}
 
-        {trendingAnimeLoading ? null : (
-          <AnimeTable
-            title="Trending"
-            data={trendingAnimes.filter(
-              (e: IAnimeResult) => e.status !== "NOT_YET_RELEASED"
-            )}
-          />
-        )}
+        <div className="flex flex-col gap-4 p-4 min-h-1/2">
+          {!trendingAnimeLoading &&
+          !trendingMangaLoading &&
+          !trendingMoviesLoading &&
+          trendingAnimes &&
+          trendingMangas &&
+          trendingMovies ? (
+            <>
+              <ContentTable
+                title="Trending Anime"
+                data={trendingAnimes.filter(
+                  (e: IAnimeResult) => e.status !== MediaStatus.NOT_YET_AIRED
+                )}
+              />
+
+              <ContentTable
+                title="Trending Manga"
+                data={trendingMangas.filter(
+                  (e: IMangaResult) => e.status !== MediaStatus.NOT_YET_AIRED
+                )}
+              />
+              <ContentTable
+                title="Trending Movies"
+                data={trendingMovies.filter(
+                  (e: IMangaResult) => e.status !== MediaStatus.NOT_YET_AIRED
+                )}
+              />
+            </>
+          ) : (
+            <>
+              <div className="flex justify-center items-center w-full h-full">
+                <span className="loading loading-lg loading-spinner"></span>
+              </div>
+            </>
+          )}
+        </div>
 
         {/* <Comments /> */}
       </div>

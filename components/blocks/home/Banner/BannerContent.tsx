@@ -34,7 +34,7 @@ export default function BannerContent(banner: IAnimeResult) {
               }}
               className="bg-opacity-70 backdrop-blur-md w-1/4 btn btn-accent btn-outline"
             >
-              Watch Now
+              <span className="text-primary-content">Watch Now</span>
             </button>
           </div>
         </div>

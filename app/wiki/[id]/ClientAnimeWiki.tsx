@@ -1,7 +1,7 @@
 "use client";
 
 import Header from "@/components/blocks/home/Header";
-import getInfo from "@/components/lib/services/getInfo";
+import getInfo from "@/components/lib/services/anime/getInfo";
 import { useQuery } from "@tanstack/react-query";
 import NextImage from "next/image";
 
@@ -18,13 +18,13 @@ export function ClientAnimeWiki(props: { id: string }) {
 
   console.log(animeData);
 
-  if(isLoading) { 
-    return <></>
+  if (isLoading) {
+    return <></>;
   }
 
   return (
     <div className="relative">
-    <Header />
+      <Header />
       <div className="relative w-full h-[400px]">
         <NextImage
           src={animeData.cover}
@@ -50,9 +50,7 @@ export function ClientAnimeWiki(props: { id: string }) {
 
           <div>
             <h1 className="mb-2 font-bold text-4xl">{animeData.title}</h1>
-            <h2 className="mb-4 text-xl">
-              {animeData.originalTitle}
-            </h2>
+            <h2 className="mb-4 text-xl">{animeData.originalTitle}</h2>
 
             <div className="flex items-center gap-4 mb-6">
               <div className="flex items-center gap-2">

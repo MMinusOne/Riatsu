@@ -16,7 +16,7 @@ export default function BannerContent(banner: IAnimeResult) {
             height={10000}
             className="opacity-90 w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-base-100/80 to-transparent" />
         </div>
         <div className="bottom-0 left-0 absolute flex flex-col gap-3 p-4 w-1/2 h-1/2">
           <span className="opacity-80 font-black text-3xl">
@@ -32,7 +32,7 @@ export default function BannerContent(banner: IAnimeResult) {
               onClick={() => {
                 router.push(`/wiki/${banner.id}`);
               }}
-              className="bg-opacity-70 backdrop-blur-md w-1/4 btn btn-outline btn-secondary"
+              className="bg-opacity-70 backdrop-blur-md w-1/4 btn btn-accent btn-outline"
             >
               Watch Now
             </button>

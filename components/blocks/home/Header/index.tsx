@@ -1,19 +1,24 @@
+"use client";
+
 import NextImage from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FaSearch, FaDiscord, FaRandom } from "react-icons/fa";
 
 export default function Header() {
+  const router = useRouter();
   return (
     <>
       <div className="p-4 navbar">
         <div className="flex-1 gap-4">
-          <a>
+          <Link href="/" className="cursor-pointer">
             <NextImage
               src="/assets/logo_full.png"
               alt="Logo"
               width={142}
               height={57}
             />
-          </a>
+          </Link>
           <div className="join">
             <div>
               <div>

@@ -9,9 +9,11 @@ import { FaArrowRight, FaArrowLeft, FaLine } from "react-icons/fa";
 import { useRef } from "react";
 import { ContentCard } from "./ContentCard";
 
-export default function AnimeTable(
-  props: { title: string; data: IAnimeResult[] }
-) {
+export default function AnimeTable(props: {
+  title: string;
+  type: "anime" | "movie" | "manga";
+  data: IAnimeResult[];
+}) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
@@ -32,8 +34,14 @@ export default function AnimeTable(
             className="flex gap-20 w-full h-fit overflow-hidden"
             ref={scrollRef}
           >
-            {props?.data?.map((card: IAnimeResult) => {
-              return <ContentCard {...card} key={card.id} />;
+            {props?.data?.map((cardInfo: IAnimeResult) => {
+              return (
+                <ContentCard
+                  {...cardInfo}
+                  cardType={props.type}
+                  key={cardInfo.id}
+                />
+              );
             })}
           </div>
 

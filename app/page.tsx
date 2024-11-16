@@ -3,12 +3,12 @@
 import Header from "@/components/blocks/home/Header";
 import Banner from "@/components/blocks/home/Banner";
 import ContentTable from "../components/blocks/home/ContentTable/index";
-import getTrendingAnime from "@/components/lib/services/anime/getTrending";
+import getTrendingAnime from "@/lib/services/anime/getTrending";
 import { useQuery } from "@tanstack/react-query";
 import ms from "ms";
 import { IAnimeResult, IMangaResult, MediaStatus } from "@consumet/extensions";
-import getTrendingManga from "@/components/lib/services/manga/getTrending";
-import getTrendingMovies from "@/components/lib/services/movies/getTrending";
+import getTrendingManga from "@/lib/services/manga/getTrending";
+import getTrendingMovies from "@/lib/services/movies/getTrending";
 
 export default function Home() {
   const { data: trendingAnimes, isLoading: trendingAnimeLoading } = useQuery({
@@ -45,6 +45,7 @@ export default function Home() {
             <>
               <ContentTable
                 title="Trending Anime"
+                type="anime"
                 data={trendingAnimes.filter(
                   (e: IAnimeResult) => e.status !== MediaStatus.NOT_YET_AIRED
                 )}
@@ -52,12 +53,14 @@ export default function Home() {
 
               <ContentTable
                 title="Trending Manga"
+                type="manga"
                 data={trendingMangas.filter(
                   (e: IMangaResult) => e.status !== MediaStatus.NOT_YET_AIRED
                 )}
               />
               <ContentTable
                 title="Trending Movies"
+                type="movie"
                 data={trendingMovies.filter(
                   (e: IMangaResult) => e.status !== MediaStatus.NOT_YET_AIRED
                 )}

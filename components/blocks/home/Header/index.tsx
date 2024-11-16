@@ -25,11 +25,23 @@ export default function Header() {
                 <input
                   className="input-bordered w-72 input join-item"
                   placeholder="Search"
+                  id="search"
                 />
               </div>
             </div>
             <div className="indicator">
-              <button className="btn btn-outline btn-secondary join-item">
+              <button
+                onClick={() => {
+                  const searchInput = document.querySelector(
+                    "#search"
+                  ) as HTMLInputElement;
+                  if (!searchInput) return;
+                  const searchQuery = searchInput?.value;
+                  if (!searchQuery) return;
+                  router.push(`/search?q=${searchQuery}`);
+                }}
+                className="btn btn-outline btn-secondary join-item"
+              >
                 Search <FaSearch />
               </button>
             </div>

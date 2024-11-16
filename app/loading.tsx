@@ -1,6 +1,14 @@
 "use client";
 
+import Header from "@/components/blocks/home/Header";
+
 export default function Loading() {
-  // Or a custom loading skeleton component
-  return <p>Loading...</p>;
+  return (
+    <>
+      <Header />
+      <div className="flex justify-center items-center w-full h-full">
+        <span className="loading loading-lg loading-spinner"></span>
+      </div>
+    </>
+  );
 }

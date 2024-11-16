@@ -7,9 +7,9 @@ import {
 } from "@consumet/extensions";
 import { FaArrowRight, FaArrowLeft, FaLine } from "react-icons/fa";
 import { useRef } from "react";
-import { ContentCard } from "./ContentCard";
+import { ContentCard } from "../../misc/ContentCard/ContentCard";
 
-export default function AnimeTable(props: {
+export default function ContentTable(props: {
   title: string;
   type: "anime" | "movie" | "manga";
   data: IAnimeResult[];

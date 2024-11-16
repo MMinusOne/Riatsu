@@ -17,17 +17,17 @@ export default function Home() {
     staleTime: ms("12h"),
   });
 
-  const { data: trendingMangas, isLoading: trendingMangaLoading } = useQuery({
-    queryFn: getTrendingManga,
-    queryKey: ["trending-manga"],
-    staleTime: ms("12h"),
-  });
+  // const { data: trendingMangas, isLoading: trendingMangaLoading } = useQuery({
+  //   queryFn: getTrendingManga,
+  //   queryKey: ["trending-manga"],
+  //   staleTime: ms("12h"),
+  // });
 
-  const { data: trendingMovies, isLoading: trendingMoviesLoading } = useQuery({
-    queryFn: getTrendingMovies,
-    queryKey: ["trending-movies"],
-    staleTime: ms("12h"),
-  });
+  // const { data: trendingMovies, isLoading: trendingMoviesLoading } = useQuery({
+  //   queryFn: getTrendingMovies,
+  //   queryKey: ["trending-movies"],
+  //   staleTime: ms("12h"),
+  // });
 
   return (
     <>
@@ -37,11 +37,11 @@ export default function Home() {
 
         <div className="flex flex-col gap-4 p-4 min-h-1/2">
           {!trendingAnimeLoading &&
-          !trendingMangaLoading &&
-          !trendingMoviesLoading &&
-          trendingAnimes &&
-          trendingMangas &&
-          trendingMovies ? (
+          // !trendingMangaLoading &&
+          // !trendingMoviesLoading &&
+          trendingAnimes ? (
+            // && trendingMangas &&
+            // trendingMovies
             <>
               <ContentTable
                 title="Trending Anime"
@@ -51,7 +51,7 @@ export default function Home() {
                 )}
               />
 
-              <ContentTable
+              {/* <ContentTable
                 title="Trending Manga"
                 type="manga"
                 data={trendingMangas.filter(
@@ -64,7 +64,7 @@ export default function Home() {
                 data={trendingMovies.filter(
                   (e: IMangaResult) => e.status !== MediaStatus.NOT_YET_AIRED
                 )}
-              />
+              /> */}
             </>
           ) : (
             <>

@@ -1,11 +1,12 @@
-import Link from 'next/link'
- 
+import Header from "@/components/blocks/home/Header";
+
 export default function NotFound() {
   return (
-    <div>
-      <h2>Not Found</h2>
-      <p>Could not find requested resource</p>
-      <Link href="/">Return Home</Link>
-    </div>
-  )
+    <>
+      <Header />
+      <div className="flex justify-center items-center w-full h-full">
+        <p className="font-bold text-4xl">Page not found (ó﹏ò｡)</p>
+      </div>
+    </>
+  );
 }

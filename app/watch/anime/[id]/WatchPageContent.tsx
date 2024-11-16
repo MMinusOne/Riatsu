@@ -26,13 +26,13 @@ export default function WatchPageContent({ id }: { id: string }) {
     queryFn: () => getEpisodesInfo(id),
     staleTime: ms("1h"),
   });
-
+  console.log(episodesData, episodeDataLoading);
   const [streamSettings, setStreamSettings] = useState({
     episode: {
       streams: [] as Array<any>,
       stream: null,
       loadingStream: true,
-      meta: episodesData?.at(0),
+      // meta: episodesData?.at(0),
       episodeIndex: 0,
     },
     videoControls: {},
@@ -81,72 +81,65 @@ export default function WatchPageContent({ id }: { id: string }) {
           }
         }
       });
-
       const proxySearchParams = new URLSearchParams();
       proxySearchParams.set("url", streamUrl);
       proxySearchParams.set(
         "headers",
         JSON.stringify({
-          referrer: "https://s3embtaku.pro",
-          origin: "https://s3embtaku.pro",
+          referrer: "https://hianime.to",
+          origin: "https:///hianime.to",
         })
       );
-      console.log(
-        `${proxyHost}/m3u8-proxy?url=${proxySearchParams}`
-      );
-      hls.loadSource(
-        `${proxyHost}/m3u8-proxy?${proxySearchParams}`
-      );
+      console.log(`${proxyHost}/m3u8-proxy?${proxySearchParams}`);
+      hls.loadSource(`${proxyHost}/m3u8-proxy?${proxySearchParams}`);
       hls.attachMedia(video);
       hlsRef.current = hls;
     }
   }, [streamSettings.episode.stream?.url]);
 
-  useEffect(() => {
-    const getEpisodeInfo = async () => {
-      if (streamSettings?.episode?.meta?.id) {
+  const getEpisodeInfo = async () => {
+    if (streamSettings?.episode?.meta?.id) {
+      setStreamSettings((prev) => ({
+        ...prev,
+        episode: {
+          ...prev.episode,
+          loadingStream: true,
+        },
+      }));
+      try {
+        console.log(streamSettings?.episode?.meta?.id);
+        const { data: streams } = await axios.post(
+          `/api/anime/episodes/stream/`,
+          {
+            episodeId: streamSettings?.episode?.meta?.id,
+          }
+        );
+        console.log(streams?.sources);
         setStreamSettings((prev) => ({
           ...prev,
           episode: {
             ...prev.episode,
-            loadingStream: true,
+            loadingStream: false,
+            streams: streams?.sources || [],
+            stream: streams?.sources?.at(0) || null,
           },
         }));
-        try {
-          console.log(streamSettings?.episode?.meta?.id);
-          const { data: streams } = await axios.post(
-            `/api/anime/episodes/stream/`,
-            {
-              episodeId: streamSettings?.episode?.meta?.id,
-            }
-          );
-          setStreamSettings((prev) => ({
-            ...prev,
-            episode: {
-              ...prev.episode,
-              loadingStream: false,
-              streams: streams?.sources || [],
-              stream:
-                streams?.sources[
-                  Math.floor(Math.random() * streams?.sources.length)
-                ] || null,
-            },
-          }));
-        } catch (error) {
-          console.error("Error fetching episode info:", error);
-          setStreamSettings((prev) => ({
-            ...prev,
-            episode: {
-              ...prev.episode,
-              loadingStream: false,
-            },
-          }));
-        }
+      } catch (error) {
+        console.error("Error fetching episode info:", error);
+        setStreamSettings((prev) => ({
+          ...prev,
+          episode: {
+            ...prev.episode,
+            loadingStream: false,
+          },
+        }));
       }
-    };
+    }
+  };
 
+  useEffect(() => {
     getEpisodeInfo();
-  }, [streamSettings?.episode?.meta?.id]);
+  }, [streamSettings?.episode?.meta?.id, animeInfoLoading]);
 
   if (animeInfoLoading || episodeDataLoading) {
     return <div className="loading">Loading...</div>;
@@ -177,9 +170,9 @@ export default function WatchPageContent({ id }: { id: string }) {
 
         <div className="flex gap-4 p-4">
           {/* Left sidebar - Episode list */}
-          <div className="bg-base-200 rounded-lg w-72 overflow-hidden">
-            <div className="bg-base-300 p-4">
-              <div className="w-full join join-vertical">
+          <div className="bg-base-200 rounded-lg w-72 max-h-[50rem]">
+            <div className="bg-base-300 p-4 h-full">
+              <div className="w-full max-h-full overflow-hidden overflow-y-scroll join join-vertical">
                 {episodesData.map((episodeData, episodeIndex) => (
                   <button
                     key={episodeIndex}
@@ -195,13 +188,13 @@ export default function WatchPageContent({ id }: { id: string }) {
                         },
                       }));
                     }}
-                    className={`justify-start btn join-item ${
+                    className={`justify-start btn join-item truncate text-sm ${
                       episodeIndex === streamSettings.episode.episodeIndex
                         ? "btn-primary"
                         : "btn-ghost"
                     }`}
                   >
-                    Episode {episodeIndex + 1}
+                    Episode {episodeData.title}
                   </button>
                 ))}
               </div>
@@ -232,12 +225,19 @@ export default function WatchPageContent({ id }: { id: string }) {
             </div>
 
             {/* Video controls */}
-            <div className="flex gap-2 mt-4">
+            <div className="flex items-center gap-2 mt-4">
               <button className="btn btn-primary">Previous</button>
               <button className="btn btn-primary">Next</button>
-              <button className="btn">Add to List</button>
-              <div className="flex-1"></div>
-              <button className="btn">Watch2gether</button>
+              <div className="form-control">
+                <label className="gap-3 cursor-pointer label">
+                  <span className="label-text">Skip Intro</span>
+                  <input type="checkbox" className="toggle" defaultChecked />
+                </label>
+              </div>
+            </div>
+            <div className="flex gap-2 bg-red-500 mt-4 w-full h-48">
+              <div></div>
+              <div></div>
             </div>
           </div>
 

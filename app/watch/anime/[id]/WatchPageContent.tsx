@@ -14,14 +14,14 @@ import Hls from "hls.js";
 export default function WatchPageContent({ id }: { id: string }) {
   const videoStreamRef = useRef<HTMLVideoElement | null>(null);
   const hlsRef = useRef<Hls | null>(null);
-  const corsProxy = "https://cors-anywhere.herokuapp.com/";
+  const proxyHost = `http://localhost:3030`;
 
   const { data: animeData, isLoading: animeInfoLoading } = useQuery({
     queryKey: ["info", id],
     queryFn: () => getAnimeInfo(id),
   });
 
-  const { data: episodeIdData, isLoading: episodeDataLoading } = useQuery({
+  const { data: episodesData, isLoading: episodeDataLoading } = useQuery({
     queryKey: ["episodes-info", id],
     queryFn: () => getEpisodesInfo(id),
     staleTime: ms("1h"),
@@ -32,7 +32,7 @@ export default function WatchPageContent({ id }: { id: string }) {
       streams: [] as Array<any>,
       stream: null,
       loadingStream: true,
-      id: episodeIdData?.[0] || null,
+      meta: episodesData?.at(0),
       episodeIndex: 0,
     },
     videoControls: {},
@@ -49,6 +49,7 @@ export default function WatchPageContent({ id }: { id: string }) {
   useEffect(() => {
     if (!streamSettings.episode.stream?.url || !videoStreamRef.current) return;
     const video = videoStreamRef.current;
+    console.log(streamSettings.episode.stream);
     const streamUrl = streamSettings.episode.stream.url;
 
     if (video.canPlayType("application/vnd.apple.mpegurl")) {
@@ -86,15 +87,15 @@ export default function WatchPageContent({ id }: { id: string }) {
       proxySearchParams.set(
         "headers",
         JSON.stringify({
-          referrer: new URL(streamUrl).host,
-          origin: "*",
+          referrer: "https://s3embtaku.pro",
+          origin: "https://s3embtaku.pro",
         })
       );
       console.log(
-        `https://m3u8proxy.riatsustreamingm3u8.workers.dev/v2?${proxySearchParams}`
+        `${proxyHost}/m3u8-proxy?url=${proxySearchParams}`
       );
       hls.loadSource(
-        `https://m3u8proxy.riatsustreamingm3u8.workers.dev/v2?${proxySearchParams}`
+        `${proxyHost}/m3u8-proxy?${proxySearchParams}`
       );
       hls.attachMedia(video);
       hlsRef.current = hls;
@@ -103,7 +104,7 @@ export default function WatchPageContent({ id }: { id: string }) {
 
   useEffect(() => {
     const getEpisodeInfo = async () => {
-      if (streamSettings.episode.id) {
+      if (streamSettings?.episode?.meta?.id) {
         setStreamSettings((prev) => ({
           ...prev,
           episode: {
@@ -112,10 +113,11 @@ export default function WatchPageContent({ id }: { id: string }) {
           },
         }));
         try {
+          console.log(streamSettings?.episode?.meta?.id);
           const { data: streams } = await axios.post(
             `/api/anime/episodes/stream/`,
             {
-              episodeId: streamSettings.episode.id,
+              episodeId: streamSettings?.episode?.meta?.id,
             }
           );
           setStreamSettings((prev) => ({
@@ -144,7 +146,7 @@ export default function WatchPageContent({ id }: { id: string }) {
     };
 
     getEpisodeInfo();
-  }, [streamSettings.episode.id]);
+  }, [streamSettings?.episode?.meta?.id]);
 
   if (animeInfoLoading || episodeDataLoading) {
     return <div className="loading">Loading...</div>;
@@ -178,7 +180,7 @@ export default function WatchPageContent({ id }: { id: string }) {
           <div className="bg-base-200 rounded-lg w-72 overflow-hidden">
             <div className="bg-base-300 p-4">
               <div className="w-full join join-vertical">
-                {episodeIdData.map((episodeId, episodeIndex) => (
+                {episodesData.map((episodeData, episodeIndex) => (
                   <button
                     key={episodeIndex}
                     onClick={() => {
@@ -186,7 +188,10 @@ export default function WatchPageContent({ id }: { id: string }) {
                         ...prev,
                         episode: {
                           episodeIndex,
-                          id: episodeId,
+                          meta: episodesData?.at(episodeIndex),
+                          loadingStream: true,
+                          stream: null,
+                          streams: [],
                         },
                       }));
                     }}
@@ -245,7 +250,7 @@ export default function WatchPageContent({ id }: { id: string }) {
             />
             <h2 className="mt-4 font-bold text-xl">{animeData.title}</h2>
             <div className="flex flex-wrap gap-2 mt-2">
-              {animeData.genres.slice(0, 4).map((genre) => (
+              {animeData.genres.slice(0, 4).map((genre: string) => (
                 <span key={genre} className="badge badge-primary">
                   {genre}
                 </span>

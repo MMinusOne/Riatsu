@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import * as consumet from "@consumet/extensions";
 import axios, { HttpStatusCode } from "axios";
 
-const gogoAnime = new consumet.ANIME.Gogoanime();
+const gogo = new consumet.ANIME.Gogoanime();
 
 export async function POST(request: Request) {
   const { id } = await request.json();
@@ -19,9 +19,11 @@ export async function POST(request: Request) {
       `https://raw.githubusercontent.com/bal-mackup/mal-backup/master/anilist/anime/${id}.json`
     );
     const gogoIds = Object.keys(data?.Sites?.Gogoanime);
-    const animeInfo = await gogoAnime.fetchAnimeInfo(gogoIds?.at(0));
-
-    return NextResponse.json(animeInfo.episodes?.map((e) => e.id));
+    console.log(data?.Sites?.Gogoanime, gogoIds)
+    const gogoId = data?.Sites?.Gogoanime[gogoIds?.at(0)]?.url?.split("/").at(-1);
+    console.log(gogoId);
+    const animeInfo = await gogo.fetchAnimeInfo(gogoId);
+    return NextResponse.json(animeInfo.episodes);
   } catch (e) {
     console.log(e);
     return NextResponse.json(e, { status: 500 });

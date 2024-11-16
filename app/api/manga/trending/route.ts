@@ -8,6 +8,7 @@ export async function GET() {
         const popular = await mangaDex.fetchPopular(1, 10);
         return Response.json(popular.results, { status: HttpStatusCode.Ok })
     } catch (e) {
+        console.error(e);
         return Response.json(e, { status: HttpStatusCode.InternalServerError })
     }
 }

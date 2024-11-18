@@ -1,23 +1,39 @@
 "use client";
 
+import ConfigurationDisplay from "@/components/watch/ConfigurationDisplay/page";
 import getEpisodesInfo from "@/lib/services/anime/getEpisdesInfo";
+import EpisodeDisplay from "@/components/watch/EpisodeDisplay";
+import ServerDisplay from "@/components/watch/ServerDisplay";
+import VideoDisplay from "@/components/watch/VideoDisplay";
+import InfoDisplay from "@/components/watch/InfoDisplay";
 import getAnimeInfo from "@/lib/services/anime/getInfo";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import NextImage from "next/image";
 import axios from "axios";
 import ms from "ms";
-import NextImage from "next/image";
-import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import Hls from "hls.js";
-import EpisodeDisplay from "@/components/watch/EpisodeDisplay";
-import VideoDisplay from "@/components/watch/VideoDisplay";
-import ConfigurationDisplay from "@/components/watch/ConfigurationDisplay/page";
-import ServerDisplay from "@/components/watch/ServerDisplay";
-import InfoDisplay from "@/components/watch/InfoDisplay";
+import {
+  ContentEnvironmentState,
+  PostiveEpisodeMeta,
+  SERVER_NAME,
+} from "@/types";
+import { useRouter } from "next/navigation";
 
-export default function WatchPageContent({ id }: { id: string }) {
-  const proxyHost = `https://m3u8-proxy-six.vercel.app`;
+export default function WatchPageContent({
+  id,
+  ep,
+}: {
+  id: string;
+  ep: number;
+}) {
+  const router = useRouter();
+  if (!id) {
+    router.push("/");
+  }
 
+  if (!ep) {
+    router.push(`/watch/anime/${id}?ep=1`);
+  }
   const { data: animeData, isLoading: animeInfoLoading } = useQuery({
     queryKey: ["info", id],
     queryFn: () => getAnimeInfo(id),
@@ -29,29 +45,35 @@ export default function WatchPageContent({ id }: { id: string }) {
     staleTime: ms("1h"),
   });
 
-  console.log({ episodesData }, episodeDataLoading);
+  const [contentEnvironment, setContentEnvironment] =
+    useState<ContentEnvironmentState>({
+      episode: {
+        loadingEpisode: true,
+        meta: null,
+        episodeIndex: null,
+      },
+      stream: {
+        loadingStream: true,
+        meta: null,
+        proxiedStream: null,
+        currentStream: null,
+        streams: [],
+        subtitles: [],
+      },
+      videoControls: {
+        autoSkipIntro: false,
+        autoSkipOutro: false,
+        server: SERVER_NAME.ZORO,
+      },
+    });
 
-  const [streamSettings, setStreamSettings] = useState({
-    episode: {
-      streams: [] as Array<any>,
-      stream: null,
-      proxiedStream: null,
-      loadingStream: true,
-      meta: episodesData?.at(0),
-      streamMeta: {},
-      episodeIndex: 0,
-    },
-    videoControls: {
-      autoSkipIntro: false,
-      autoSkipOutro: false,
-      server: { id: "zoro", name: "Zoro" },
-    },
-  });
+  console.log(contentEnvironment);
 
   useEffect(() => {
-    if (!streamSettings.episode.stream?.url) return;
-
-    const streamUrl = streamSettings.episode.stream.url;
+    const stream = contentEnvironment?.stream;
+    if (!stream?.currentStream) return;
+    const { url: streamUrl } = contentEnvironment?.stream?.currentStream!;
+    if (!streamUrl) return;
 
     const proxySearchParams = new URLSearchParams();
     proxySearchParams.set("url", streamUrl);
@@ -59,64 +81,77 @@ export default function WatchPageContent({ id }: { id: string }) {
       "headers",
       JSON.stringify({
         referrer: "https://hianime.to",
-        origin: "https:///hianime.to",
+        // origin: "https://hianime.to",
       })
     );
 
-    const proxiedStream = `${proxyHost}/m3u8-proxy?${proxySearchParams}`;
-    setStreamSettings({
-      ...streamSettings,
-      episode: { ...streamSettings.episode, proxiedStream },
+    const proxiedStream = `${process.env.NEXT_M3U8_PROXY}/m3u8-proxy?${proxySearchParams}`;
+    setContentEnvironment({
+      ...contentEnvironment,
+      stream: {
+        ...contentEnvironment.stream,
+        proxiedStream,
+      },
     });
-  }, [streamSettings.episode.stream?.url]);
+  }, [contentEnvironment.stream.currentStream]);
 
   const getEpisodeInfo = async () => {
-    if (streamSettings?.episode?.meta?.id) {
-      setStreamSettings((prev) => ({
-        ...prev,
-        episode: {
-          ...prev.episode,
-          loadingStream: true,
-        },
-      }));
+    if (contentEnvironment?.episode?.meta?.id) {
       try {
         const { data: streams } = await axios.post(
           `/api/anime/episodes/stream/`,
           {
-            episodeId: streamSettings?.episode?.meta?.id,
+            episodeId: contentEnvironment?.episode?.meta?.id,
           }
         );
-        console.log({ streams });
-        setStreamSettings((prev) => ({
-          ...prev,
-          episode: {
-            ...prev.episode,
+        setContentEnvironment({
+          ...contentEnvironment,
+          stream: {
+            ...contentEnvironment.stream,
             loadingStream: false,
             streams: streams?.sources || [],
-            stream: streams?.sources?.at(0) || null,
+            currentStream: streams?.sources?.at(0) || null,
             subtitles: streams?.subtitles || [],
-            streamMeta: {
+            meta: {
               intro: streams.intro || 0,
               outro: streams?.outro || 0,
             },
           },
-        }));
+        });
       } catch (error) {
         console.error("Error fetching episode info:", error);
-        setStreamSettings((prev) => ({
-          ...prev,
-          episode: {
-            ...prev.episode,
-            loadingStream: false,
+        setContentEnvironment({
+          ...contentEnvironment,
+          stream: {
+            ...contentEnvironment.stream,
+            loadingStream: true,
           },
-        }));
+        });
       }
     }
   };
 
   useEffect(() => {
     getEpisodeInfo();
-  }, [streamSettings?.episode?.meta?.id, animeInfoLoading]);
+  }, [animeInfoLoading]);
+
+  useEffect(() => {
+    if (episodeDataLoading) return;
+    const episodeIndex = parseInt(ep) - 1;
+    const episodeData = episodesData.at(episodeIndex);
+    if (!episodeData) {
+      router.push(`/watch/anime/${id}?ep=1`);
+      return;
+    }
+    setContentEnvironment((prev) => ({
+      ...prev,
+      episode: {
+        loadingEpisode: false,
+        episodeIndex: episodeIndex,
+        meta: episodesData?.at(episodeIndex),
+      },
+    }));
+  }, [episodesData, episodeDataLoading, ep, id, router]);
 
   if (animeInfoLoading || episodeDataLoading) {
     return <div className="loading">Loading...</div>;
@@ -141,40 +176,39 @@ export default function WatchPageContent({ id }: { id: string }) {
             <li>
               <a>{animeData.title}</a>
             </li>
-            <li>Episode. {streamSettings.episode.episodeIndex + 1}</li>
+            {contentEnvironment?.episode.episodeIndex ? (
+              <li>Episode. {contentEnvironment.episode.episodeIndex + 1}</li>
+            ) : null}
           </ul>
         </div>
 
         <div className="flex gap-4 p-4">
-          <EpisodeDisplay
-            episodesData={episodesData}
-            selectedEpisode={streamSettings?.episode}
-            onEpisodeSelect={(episodeData, episodeIndex) => {
-              console.log({ episodeData });
-              setStreamSettings((prev) => ({
-                ...prev,
-                episode: {
-                  episodeIndex,
-                  meta: episodesData?.at(episodeIndex),
-                  loadingStream: true,
-                  stream: null,
-                  streams: [],
-                  proxiedStream: null,
-                  streamMeta: {},
-                },
-              }));
-            }}
-          />
+          {!contentEnvironment.episode.loadingEpisode ? (
+            <EpisodeDisplay
+              episodesData={episodesData}
+              selectedEpisode={contentEnvironment?.episode}
+              onEpisodeSelect={(
+                episodeData: PostiveEpisodeMeta,
+                episodeIndex: number
+              ) => {
+                router.push(`/watch/anime/${id}?ep=${episodeIndex + 1}`);
+                window.location.reload();
+              }}
+            />
+          ) : null}
 
           <div className="flex-1">
-            <VideoDisplay streamSettings={streamSettings} />
+            <VideoDisplay
+              contentEnvironment={contentEnvironment}
+              animeData={animeData}
+            />
             <ConfigurationDisplay
-              streamSettings={streamSettings}
+              streamSettings={contentEnvironment}
               onSelectAutoSkipIntro={() => {}}
               onSelectAutoSkipOutro={() => {}}
             />
             <ServerDisplay
-              streamSettings={streamSettings}
+              streamSettings={contentEnvironment}
               onSelectServer={() => {}}
             />
           </div>

@@ -3,19 +3,18 @@ import WatchPageContent from "./WatchPageContent";
 
 export default async function WatchPage({
   params,
+  searchParams,
 }: {
   params: { id: string };
+  searchParams: Promise<{ ep: number }>;
 }) {
   const { id } = await params;
-
-  if (!id) {
-    return <></>;
-  }
+  let { ep } = await searchParams;
 
   return (
     <>
       <Header />
-      <WatchPageContent id={id} />
+      <WatchPageContent id={id} ep={ep} />
     </>
   );
 }

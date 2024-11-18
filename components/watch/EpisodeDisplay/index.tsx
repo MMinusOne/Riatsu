@@ -1,5 +1,7 @@
-export default function EpisodeDisplay(props) {
-  const { episodesData, selectedEpisode } = props;
+import { EpisodeDisplayProps } from "@/types";
+
+export default function EpisodeDisplay(props: EpisodeDisplayProps) {
+  const { episodesData, selectedEpisode, onEpisodeSelect } = props;
   if (!episodesData) return <></>;
   return (
     <>
@@ -9,7 +11,7 @@ export default function EpisodeDisplay(props) {
             {episodesData.map((episodeData, episodeIndex) => (
               <button
                 key={episodeIndex}
-                onClick={() => props.onEpisodeSelect(episodeData, episodeIndex)}
+                onClick={() => onEpisodeSelect(episodeData, episodeIndex)}
                 className={`justify-start btn join-item truncate text-sm ${
                   episodeIndex === selectedEpisode.episodeIndex
                     ? "btn-primary"

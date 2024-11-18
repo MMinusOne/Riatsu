@@ -11,6 +11,9 @@ const nextConfig: NextConfig = {
       { hostname: "mangadex.org" },
     ],
   },
+  env: {
+    NEXT_M3U8_PROXY: process.env.NEXT_M3U8_PROXY,
+  },
 };
 
 export default nextConfig;

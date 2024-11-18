@@ -1,23 +1,27 @@
-import { MediaPlayer, MediaProvider, Track } from "@vidstack/react";
+import { VideoDisplayProps } from "@/types";
+import {
+  MediaPlayer,
+  MediaProvider,
+  MediaTimeUpdateEventDetail,
+  Track,
+} from "@vidstack/react";
 import "@vidstack/react/player/styles/base.css";
 
-export default function VideoDisplay(props) {
-  const { streamSettings } = props;
+export default function VideoDisplay(props: VideoDisplayProps) {
+  const { contentEnvironment, animeData } = props;
 
-  if (!streamSettings) return <></>;
-
-  const handleTimeUpdate = (player) => {
-    if (!player) return;
+  const handleTimeUpdate = (player: MediaTimeUpdateEventDetail) => {
+    if (!player || !contentEnvironment.stream.meta) return;
 
     const currentTime = player.currentTime;
-    const intro = streamSettings?.episode?.streamMeta?.intro;
-    const outro = streamSettings?.episode?.streamMeta?.outro;
+    const { intro } = contentEnvironment.stream.meta;
+    const { outro } = contentEnvironment.stream.meta;
 
     if (
       intro &&
       currentTime >= intro.start &&
       currentTime < intro.end &&
-      streamSettings?.videoControls?.autoSkipIntro
+      contentEnvironment?.videoControls?.autoSkipIntro
     ) {
       player.currentTime = intro.end;
     }
@@ -26,7 +30,7 @@ export default function VideoDisplay(props) {
       outro &&
       currentTime >= outro.start &&
       currentTime < outro.end &&
-      streamSettings?.videoControls?.autoSkipOutro
+      contentEnvironment?.videoControls?.autoSkipOutro
     ) {
       player.currentTime = outro.end;
     }
@@ -37,27 +41,27 @@ export default function VideoDisplay(props) {
       <div className="bg-base-200 rounded-lg w-full aspect-video">
         <div
           className={`flex justify-center ${
-            streamSettings.episode.loadingStream ? "" : "skeleton"
+            contentEnvironment.stream.loadingStream ? "skeleton" : ""
           } items-center w-full h-full`}
         >
-          {streamSettings.episode.loadingStream &&
-          !streamSettings?.episode?.proxiedStream ? (
+          {contentEnvironment.stream.loadingStream &&
+          !contentEnvironment.stream.proxiedStream &&
+          !contentEnvironment.episode.meta ? (
             <span className="loading loading-lg loading-spinner"></span>
           ) : (
             <MediaPlayer
-              title={streamSettings?.episode?.title}
-              poster={streamSettings?.episode?.meta?.image}
+              title={contentEnvironment.episode.meta?.title}
+              poster={animeData.cover}
               controls
               playsInline
               onTimeUpdate={handleTimeUpdate}
-              src={streamSettings?.episode?.proxiedStream || ""}
+              src={contentEnvironment?.stream?.proxiedStream || ""}
             >
               <MediaProvider />
               <Track
-                src={streamSettings?.episode?.subtitles?.at(0)?.url}
+                src={contentEnvironment?.stream?.subtitles?.at(0)?.url}
                 kind="subtitles"
-                label="English"
-                lang="en-US"
+                label={contentEnvironment?.stream?.subtitles?.at(0)?.lang}
                 default
               />
             </MediaPlayer>

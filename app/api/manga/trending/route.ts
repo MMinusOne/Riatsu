@@ -1,4 +1,4 @@
-import consumet from '@consumet/extensions';
+import * as consumet from '@consumet/extensions';
 import { HttpStatusCode } from 'axios'
 
 const mangaDex = new consumet.MANGA.MangaDex()

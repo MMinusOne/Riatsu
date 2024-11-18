@@ -27,6 +27,7 @@ export async function POST(request: Request) {
 
     const zoroIds = Object.keys(data?.Sites?.Zoro);
     const zoroId = data?.Sites?.Zoro[zoroIds.at(0)]?.url?.split("/").at(-1);
+    console.log(data?.Sites?.Zoro)
     const animeInfo = await zoro.fetchAnimeInfo(zoroId);
 
     return NextResponse.json(animeInfo.episodes);

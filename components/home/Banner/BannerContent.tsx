@@ -32,7 +32,7 @@ export default function BannerContent(banner: IAnimeResult) {
               onClick={() => {
                 router.push(`/wiki/${banner.id}`);
               }}
-              className="bg-opacity-70 backdrop-blur-md w-1/4 btn btn-accent btn-outline"
+              className="bg-opacity-70 backdrop-blur-md w-1/4 btn btn-accent btn-outline glass"
             >
               <span className="text-primary-content">Watch Now</span>
             </button>

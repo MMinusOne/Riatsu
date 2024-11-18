@@ -1,6 +1,6 @@
 "use client";
 
-import Header from "@/components/blocks/home/Header";
+import Header from "@/components/home/Header";
 import getAnimeInfo from "@/lib/services/anime/getInfo";
 import getMangaInfo from "@/lib/services/manga/getInfo";
 import getMovieInfo from "@/lib/services/movies/getInfo";

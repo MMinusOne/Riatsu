@@ -1,4 +1,4 @@
-import Header from "@/components/blocks/home/Header";
+import Header from "@/components/home/Header";
 import WatchPageContent from "./WatchPageContent";
 
 export default async function WatchPage({

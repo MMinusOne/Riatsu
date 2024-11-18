@@ -1,6 +1,6 @@
 "use client";
 
-import SearchTable from "@/components/blocks/search/SearchTable";
+import SearchTable from "@/components/search/SearchTable";
 import searchContent from "@/lib/services/searchContent";
 import { useQuery } from "@tanstack/react-query";
 
@@ -11,9 +11,8 @@ export default function SearchContentPage({ q }: { q: string }) {
   });
 
   if (searchResultsLoading) {
+    return (<></>)
   }
-
-  console.log({ searchResults });
 
   return (
     <>

@@ -1,6 +1,6 @@
 "use client";
 
-import Header from "@/components/blocks/home/Header";
+import Header from "@/components/home/Header";
 
 export default function Loading() {
   return (

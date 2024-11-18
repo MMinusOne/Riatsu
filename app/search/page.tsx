@@ -1,4 +1,4 @@
-import Header from "@/components/blocks/home/Header";
+import Header from "@/components/home/Header";
 import SearchContentPage from "./SearchContentPage";
 
 export default async function SearchPage({
@@ -11,7 +11,7 @@ export default async function SearchPage({
   return (
     <>
       <Header />
-      <SearchContentPage q={q}/>
+      <SearchContentPage q={q} />
     </>
   );
 }

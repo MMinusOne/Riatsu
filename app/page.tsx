@@ -1,8 +1,8 @@
 "use client";
 
-import Header from "@/components/blocks/home/Header";
-import Banner from "@/components/blocks/home/Banner";
-import ContentTable from "../components/blocks/home/ContentTable/index";
+import Header from "@/components/home/Header";
+import Banner from "@/components/home/Banner";
+import ContentTable from "../components/home/ContentTable/index";
 import getTrendingAnime from "@/lib/services/anime/getTrending";
 import { useQuery } from "@tanstack/react-query";
 import ms from "ms";

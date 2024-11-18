@@ -29,7 +29,7 @@ export default function InfoDisplay(props: InfoDisplayProps) {
         <div className="mt-4">
           <Link
             target="_blank"
-            href={`https://anilist.co/anime/${animeData.id}/Bungou-Stray-Dogs-5th-Season`}
+            href={`https://anilist.co/anime/${animeData.id}`}
             className="w-full btn btn-primary"
           >
             View Details

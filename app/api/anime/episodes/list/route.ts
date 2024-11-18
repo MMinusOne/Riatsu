@@ -25,9 +25,10 @@ export async function POST(request: Request) {
     // console.log(gogoId);
     // const animeInfo = await gogo.fetchAnimeInfo(gogoId);
 
-    const zoroIds = Object.keys(data?.Sites?.Zoro);
-    const zoroId = data?.Sites?.Zoro[zoroIds.at(0)]?.url?.split("/").at(-1);
-    console.log(data?.Sites?.Zoro)
+    const zoroKeys = [...Object.keys(data?.Sites?.Zoro)];
+    const zoroKey = zoroKeys.at(0);
+    const zoroId = data?.Sites?.Zoro[zoroKey!]?.url?.split("/").at(-1);
+    console.log(data?.Sites?.Zoro);
     const animeInfo = await zoro.fetchAnimeInfo(zoroId);
 
     return NextResponse.json(animeInfo.episodes);

@@ -1,6 +1,7 @@
 import { IAnimeResult } from "@consumet/extensions";
 
-export declare type ContentEnvironmentState = {
+export declare type ContentEnvironmentState =
+  | {
       stream: NegativeStream;
       episode: PostiveEpisodeMeta;
       videoControls: EpisodeControls;
@@ -54,7 +55,7 @@ export interface NegativeEpisodeMeta {
 export interface EpisodeControls {
   autoSkipIntro: boolean;
   autoSkipOutro: boolean;
-  server: ServerName;
+  server: SERVER_NAME;
 }
 
 export interface Stream {
@@ -92,13 +93,41 @@ export enum SERVER_NAME {
   GOGO = "gogo",
 }
 
+export enum SUB_OR_DUB {
+  DUB = "dub",
+  SUB = "sub",
+}
+
 export interface EpisodeDisplayProps {
   episodesData: any[];
   selectedEpisode: PostiveEpisodeMeta;
   onEpisodeSelect: (episodeData: any, episodeIndex: number) => void;
 }
 
-export interface VideoDisplayProps { 
-    contentEnvironment: ContentEnvironmentState;
-    animeData: IAnimeResult
+export interface VideoDisplayProps {
+  contentEnvironment: ContentEnvironmentState;
+  animeData: IAnimeResult;
+}
+
+export interface ConfigurationDisplayProps {
+  contentEnvironment: ContentEnvironmentState;
+  onSelectAutoSkipIntro: (selected: boolean) => void;
+  onSelectAutoSkipOutro: (selected: boolean) => void;
+}
+
+export interface ServerDisplayProps {
+  onServerSelect: () => void;
+  contentEnvironment: ContentEnvironmentState;
+  selectedServer: SERVER_NAME;
+}
+
+export interface ServerTableProps {
+  name: SUB_OR_DUB;
+  servers: SERVER_NAME[];
+  onServerSelect: () => void;
+  selectedServer: SERVER_NAME;
+}
+
+export interface InfoDisplayProps {
+  animeData: IAnimeResult;
 }

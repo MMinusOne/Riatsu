@@ -137,7 +137,7 @@ export default function WatchPageContent({
 
   useEffect(() => {
     if (episodeDataLoading) return;
-    const episodeIndex = parseInt(ep) - 1;
+    const episodeIndex = Number(ep) - 1;
     const episodeData = episodesData.at(episodeIndex);
     if (!episodeData) {
       router.push(`/watch/anime/${id}?ep=1`);
@@ -203,13 +203,14 @@ export default function WatchPageContent({
               animeData={animeData}
             />
             <ConfigurationDisplay
-              streamSettings={contentEnvironment}
+              contentEnvironment={contentEnvironment}
               onSelectAutoSkipIntro={() => {}}
               onSelectAutoSkipOutro={() => {}}
             />
             <ServerDisplay
-              streamSettings={contentEnvironment}
-              onSelectServer={() => {}}
+              contentEnvironment={contentEnvironment}
+              selectedServer={SERVER_NAME.ZORO}
+              onServerSelect={() => {}}
             />
           </div>
 

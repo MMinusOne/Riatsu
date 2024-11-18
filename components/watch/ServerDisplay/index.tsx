@@ -1,17 +1,15 @@
-export default function ServerDisplay(props) {
+import {
+  SERVER_NAME,
+  ServerDisplayProps,
+  ServerTableProps,
+  SUB_OR_DUB,
+} from "@/types";
+
+export default function ServerDisplay(props: ServerDisplayProps) {
   const { selectedServer } = props;
 
-  const servers = [
-    {
-      name: "Zoro",
-      id: "zoro",
-    },
-    {
-      name: "Gogo",
-      id: "gogo",
-    },
-  ];
-  
+  const servers = [SERVER_NAME.ZORO, SERVER_NAME.GOGO];
+
   return (
     <>
       <div className="flex bg-base-200 bg-opacity-20 backdrop-blur-lg mt-4 w-full h-40">
@@ -23,13 +21,13 @@ export default function ServerDisplay(props) {
         </div>
         <div className="flex flex-col w-full h-full">
           <ServerTable
-            name="Sub"
+            name={SUB_OR_DUB.SUB}
             servers={servers}
             onServerSelect={() => {}}
             selectedServer={selectedServer}
           />
           <ServerTable
-            name="Dub"
+            name={SUB_OR_DUB.DUB}
             servers={servers}
             onServerSelect={() => {}}
             selectedServer={selectedServer}
@@ -40,7 +38,7 @@ export default function ServerDisplay(props) {
   );
 }
 
-function ServerTable(props) {
+function ServerTable(props: ServerTableProps) {
   const { name, servers, selectedServer, onServerSelect } = props;
   return (
     <>
@@ -53,10 +51,10 @@ function ServerTable(props) {
             return (
               <button
                 className={`rounded-full btn btn-sm ${
-                  selectedServer === server.id ? "btn-primary" : "btn-ghost"
+                  selectedServer === server ? "btn-primary" : "btn-ghost"
                 }`}
               >
-                {server.name}
+                {server}
               </button>
             );
           })}

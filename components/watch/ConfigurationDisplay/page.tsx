@@ -1,4 +1,8 @@
-export default function ConfigurationDisplay(props) {
+import { ConfigurationDisplayProps } from "@/types";
+
+export default function ConfigurationDisplay(props: ConfigurationDisplayProps) {
+  const { contentEnvironment, onSelectAutoSkipIntro, onSelectAutoSkipOutro } =
+    props;
   return (
     <>
       <div className="flex items-center gap-2 mt-4">
@@ -10,7 +14,7 @@ export default function ConfigurationDisplay(props) {
             <input
               type="checkbox"
               className="toggle"
-              checked={props?.videoControls?.autoSkipIntro}
+              checked={contentEnvironment?.videoControls?.autoSkipIntro}
             />
           </label>
         </div>
@@ -19,7 +23,7 @@ export default function ConfigurationDisplay(props) {
           <input
             type="checkbox"
             className="toggle"
-            checked={props?.videoControls?.autoSkipOutro}
+            checked={contentEnvironment?.videoControls?.autoSkipOutro}
           />
         </label>
         <div className="flex-1"></div>

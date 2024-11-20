@@ -7,7 +7,7 @@ export default function SearchTable(props: {
 }) {
   return (
     <>
-      <div className="flex flex-wrap gap-x-4 gap-y-3 p-4 w-full h-fit">
+      <div key="search-table" className="flex flex-wrap gap-x-4 gap-y-3 p-4 w-full h-fit">
         {props?.data?.map((cardInfo, cardIndex) => {
           return (
             <>

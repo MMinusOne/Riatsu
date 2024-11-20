@@ -1,10 +1,10 @@
 import * as consumet from "@consumet/extensions";
 
-const anilist = new consumet.META.Anilist();
+const zoro = new consumet.ANIME.Zoro();
 
 export async function POST(request: Request) {
   const { q } = await request.json();
-  const searchPage = await anilist.search(q);
+  const searchPage = await zoro.search(q);
   const { results: searchResults } = searchPage;
 
   return Response.json(searchResults);

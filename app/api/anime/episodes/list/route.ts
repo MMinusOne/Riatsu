@@ -16,22 +16,26 @@ export async function POST(request: Request) {
   }
 
   try {
-    const { data } = await axios.get(
-      `https://raw.githubusercontent.com/bal-mackup/mal-backup/master/anilist/anime/${id}.json`
-    );
     // const gogoIds = Object.keys(data?.Sites?.Gogoanime);
     // console.log(data?.Sites?.Gogoanime, gogoIds)
     // const gogoId = gogoIds.at(0);
     // console.log(gogoId);
     // const animeInfo = await gogo.fetchAnimeInfo(gogoId);
+    const animeInfo = await zoro.fetchAnimeInfo(id);
+    const dubEpisodes = [];
+    const subEpisodes = [];
+    for (const episode of animeInfo?.episodes || []) {
+      const episodeId = episode.id.split("$").slice(0, -1).join("$");
+      const episodeSubOrDub = episode.id.split("$").at(-1);
 
-    const zoroKeys = [...Object.keys(data?.Sites?.Zoro)];
-    const zoroKey = zoroKeys.at(0);
-    const zoroId = data?.Sites?.Zoro[zoroKey!]?.url?.split("/").at(-1);
-    console.log(data?.Sites?.Zoro);
-    const animeInfo = await zoro.fetchAnimeInfo(zoroId);
-
-    return NextResponse.json(animeInfo.episodes);
+      if (episodeSubOrDub === "both") {
+        dubEpisodes.push({ ...episode, id: `${episodeId}$dub` });
+        subEpisodes.push({ ...episode, id: `${episodeId}$sub` });
+      } else if (episodeSubOrDub === "sub") {
+        subEpisodes.push({ ...episode, id: `${episodeId}$sub` });
+      }
+    }
+    return NextResponse.json({ subEpisodes, dubEpisodes });
   } catch (e) {
     console.log(e);
     return NextResponse.json(e, { status: 500 });

@@ -1,14 +1,8 @@
-import {
-  SERVER_NAME,
-  ServerDisplayProps,
-  ServerTableProps,
-  SUB_OR_DUB,
-} from "@/types";
+import servers from "@/constants/servernames";
+import { ServerDisplayProps, ServerTableProps, SUB_OR_DUB } from "@/types";
 
 export default function ServerDisplay(props: ServerDisplayProps) {
-  const { selectedServer } = props;
-
-  const servers = [SERVER_NAME.ZORO, SERVER_NAME.GOGO];
+  const { selectedServer, onServerSelect } = props;
 
   return (
     <>
@@ -21,15 +15,19 @@ export default function ServerDisplay(props: ServerDisplayProps) {
         </div>
         <div className="flex flex-col w-full h-full">
           <ServerTable
-            name={SUB_OR_DUB.SUB}
-            servers={servers}
-            onServerSelect={() => {}}
+            name={"Sub"}
+            servers={Object.values(servers).filter(
+              (e) => e.SUB_OR_DUB === SUB_OR_DUB.SUB
+            )}
+            onServerSelect={onServerSelect}
             selectedServer={selectedServer}
           />
           <ServerTable
-            name={SUB_OR_DUB.DUB}
-            servers={servers}
-            onServerSelect={() => {}}
+            name={"Dub"}
+            servers={Object.values(servers).filter(
+              (e) => e.SUB_OR_DUB === SUB_OR_DUB.DUB
+            )}
+            onServerSelect={onServerSelect}
             selectedServer={selectedServer}
           />
         </div>
@@ -43,18 +41,27 @@ function ServerTable(props: ServerTableProps) {
   return (
     <>
       <div className="flex w-full h-1/2">
-        <div className="flex justify-center items-center backdrop-blur-2xl h-full aspect-square">
+        <div className="flex justify-center items-center backdrop-blur-2xl h-full uppercase aspect-square">
           {name}
         </div>
-        <div className="flex items-center gap-4 p-8 w-full h-full">
-          {servers.map((server) => {
+        <div
+          key="servers"
+          className="flex items-center gap-4 p-8 w-full h-full"
+        >
+          {servers.map((server, serverIndex) => {
             return (
               <button
+                key={serverIndex}
+                onClick={() => {
+                  onServerSelect(server);
+                }}
                 className={`rounded-full btn btn-sm ${
-                  selectedServer === server ? "btn-primary" : "btn-ghost"
+                  server.available ? "" : "disabled btn-disabled"
+                } ${
+                  selectedServer.id === server.id ? "btn-primary" : "btn-ghost"
                 }`}
               >
-                {server}
+                {server.name}
               </button>
             );
           })}

@@ -7,6 +7,7 @@ import Header from "@/components/home/Header";
 import Banner from "@/components/home/Banner";
 import { useQuery } from "@tanstack/react-query";
 import ms from "ms";
+import getSpotlightAnime from "@/lib/services/anime/getSpotlight";
 
 export default function Home() {
   const { data: trendingAnimes, isLoading: trendingAnimeLoading } = useQuery({
@@ -14,12 +15,16 @@ export default function Home() {
     queryKey: ["trending-anime"],
     staleTime: ms("12h"),
   });
-
+  const { data: spotlightAnimes, isLoading: spotlightAnimeLoading } = useQuery({
+    queryFn: getSpotlightAnime,
+    queryKey: ["spotlight-anime"],
+    staleTime: ms("12h"),
+  });
   return (
     <>
       <div className="flex flex-col gap-3">
         <Header />
-        {trendingAnimeLoading ? null : <Banner data={trendingAnimes} />}
+        {spotlightAnimeLoading ? null : <Banner data={spotlightAnimes} />}
 
         <div className="flex flex-col gap-4 p-4 min-h-1/2">
           {!trendingAnimeLoading && trendingAnimes ? (

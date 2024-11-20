@@ -7,7 +7,7 @@ const zoroAnime = new consumet.ANIME.Zoro();
 
 export async function POST(request: Request) {
   const { episodeId } = await request.json();
-  console.log({ episodeId });
+
   if (!episodeId) {
     return NextResponse.json(
       { error: "No id was provided" },

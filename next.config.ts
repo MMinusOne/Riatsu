@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
       { hostname: "artworks.thetvdb.com" },
       { hostname: "media.kitsu.app" },
       { hostname: "mangadex.org" },
+      { hostname: "cdn.noitatnemucod.net" }
     ],
   },
   env: {

@@ -32,8 +32,6 @@ export function ClientWiki(props: {
     return <></>;
   }
 
-  console.log(contentData);
-
   return (
     <>
       <Header />
@@ -41,8 +39,8 @@ export function ClientWiki(props: {
       <div className="relative w-full h-[400px]">
         <NextImage
           unoptimized
-          src={contentData.cover}
-          alt={contentData.title}
+          src={contentData.anilistInfo.cover}
+          alt={contentData.zoroInfo.title}
           fill
           className="opacity-80 object-cover"
           priority
@@ -56,8 +54,8 @@ export function ClientWiki(props: {
             <div className="flex-shrink-0">
               <NextImage
                 unoptimized
-                src={contentData.image}
-                alt={contentData.title}
+                src={contentData.zoroInfo.image}
+                alt={contentData.zoroInfo.title}
                 width={220}
                 height={300}
                 className="opacity-90 shadow-lg rounded-lg"
@@ -65,23 +63,23 @@ export function ClientWiki(props: {
             </div>
 
             <div>
-              <h1 className="mb-2 font-bold text-4xl">{contentData.title}</h1>
-              <h2 className="mb-4 text-xl">{contentData.originalTitle}</h2>
+              <h1 className="mb-2 font-bold text-4xl">{contentData.zoroInfo.title}</h1>
+              <h2 className="mb-4 text-xl">{contentData.anilistInfo.originalTitle}</h2>
 
               <div className="flex items-center gap-4 mb-6">
                 <div className="flex items-center gap-2">
                   <span className="flex justify-center items-center gap-2 text-center text-xl">
-                    <FaStar /> {contentData.rating}
+                    <FaStar /> {contentData.anilistInfo.rating}
                   </span>
                   <span className="bg-primary px-2 py-1 rounded text-sm">
-                    {contentData.status}
+                    {contentData.anilistInfo.status}
                   </span>
                 </div>
               </div>
 
               <div className="flex gap-4">
                 <Link
-                  href={`/watch/anime/${contentData.id}`}
+                  href={`/watch/anime/${contentData.zoroInfo.id}`}
                   className="bg-opacity-30 backdrop-blur-md rounded-md font-medium btn btn-primary"
                 >
                   Play Now

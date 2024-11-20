@@ -58,6 +58,16 @@ export interface EpisodeControls {
   server: SERVER_NAME;
 }
 
+export interface SERVER_NAME {
+  id: string;
+  name: string;
+  typeName: string;
+  SUB_OR_DUB: SUB_OR_DUB;
+  available: boolean;
+}
+
+export type SERVER_NAMES = Record<string, SERVER_NAME>;
+
 export interface Stream {
   url: string;
   type: string;
@@ -88,11 +98,6 @@ export interface Subtitle {
   lang: string;
 }
 
-export enum SERVER_NAME {
-  ZORO = "zoro",
-  GOGO = "gogo",
-}
-
 export enum SUB_OR_DUB {
   DUB = "dub",
   SUB = "sub",
@@ -116,15 +121,15 @@ export interface ConfigurationDisplayProps {
 }
 
 export interface ServerDisplayProps {
-  onServerSelect: () => void;
+  onServerSelect: (server: SERVER_NAME) => void;
   contentEnvironment: ContentEnvironmentState;
   selectedServer: SERVER_NAME;
 }
 
 export interface ServerTableProps {
-  name: SUB_OR_DUB;
+  name: string;
   servers: SERVER_NAME[];
-  onServerSelect: () => void;
+  onServerSelect: (server: SERVER_NAME) => void;
   selectedServer: SERVER_NAME;
 }
 

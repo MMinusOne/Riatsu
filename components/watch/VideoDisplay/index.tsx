@@ -1,17 +1,20 @@
 import { VideoDisplayProps } from "@/types";
 import {
   MediaPlayer,
+  MediaPlayerInstance,
   MediaProvider,
   MediaTimeUpdateEventDetail,
   Track,
 } from "@vidstack/react";
 import "@vidstack/react/player/styles/base.css";
+import { useRef } from "react";
 
 export default function VideoDisplay(props: VideoDisplayProps) {
   const { contentEnvironment, animeData } = props;
+  const videoRef = useRef<MediaPlayerInstance>();
 
   const handleTimeUpdate = (player: MediaTimeUpdateEventDetail) => {
-    if (!player || !contentEnvironment.stream.meta) return;
+    if (!player || !contentEnvironment.stream.meta || !videoRef.current) return;
 
     const currentTime = player.currentTime;
     const { intro } = contentEnvironment.stream.meta;
@@ -23,7 +26,7 @@ export default function VideoDisplay(props: VideoDisplayProps) {
       currentTime < intro.end &&
       contentEnvironment?.videoControls?.autoSkipIntro
     ) {
-      player.currentTime = intro.end;
+      videoRef.current.currentTime = intro.end;
     }
 
     if (
@@ -32,7 +35,7 @@ export default function VideoDisplay(props: VideoDisplayProps) {
       currentTime < outro.end &&
       contentEnvironment?.videoControls?.autoSkipOutro
     ) {
-      player.currentTime = outro.end;
+      videoRef.current.currentTime = outro.end;
     }
   };
 
@@ -56,6 +59,7 @@ export default function VideoDisplay(props: VideoDisplayProps) {
               playsInline
               onTimeUpdate={handleTimeUpdate}
               src={contentEnvironment?.stream?.proxiedStream || ""}
+              ref={videoRef}
             >
               <MediaProvider />
               <Track

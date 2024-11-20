@@ -6,7 +6,7 @@ export default async function WatchPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ ep: number }>;
+  searchParams: Promise<{ ep: number; }>;
 }) {
   const { id } = await params;
   let { ep } = await searchParams;

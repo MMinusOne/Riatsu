@@ -14,7 +14,10 @@ export default function ConfigurationDisplay(props: ConfigurationDisplayProps) {
             <input
               type="checkbox"
               className="toggle"
-              checked={contentEnvironment?.videoControls?.autoSkipIntro}
+              defaultChecked={contentEnvironment?.videoControls?.autoSkipIntro}
+              onChange={(e) => {
+                onSelectAutoSkipIntro(e.target.checked);
+              }}
             />
           </label>
         </div>
@@ -23,7 +26,10 @@ export default function ConfigurationDisplay(props: ConfigurationDisplayProps) {
           <input
             type="checkbox"
             className="toggle"
-            checked={contentEnvironment?.videoControls?.autoSkipOutro}
+            defaultChecked={contentEnvironment?.videoControls?.autoSkipOutro}
+            onChange={(e) => {
+              onSelectAutoSkipOutro(e.target.checked);
+            }}
           />
         </label>
         <div className="flex-1"></div>

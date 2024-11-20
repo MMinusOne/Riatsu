@@ -11,14 +11,14 @@ export default function Banner(props: { data: IAnimeResult[] }) {
   useEffect(() => {
     const newBanners: IAnimeResult[] = [];
     for (const animeResult of props.data) {
-      if (animeResult.cover) {
+      if (animeResult.banner) {
         const img = new Image();
-        img.src = animeResult.cover;
+        img.src = animeResult.banner;
         img.onload = () => {
-          if (img.height === 400) {
-            newBanners.push(animeResult);
-            setBanners(newBanners);
-          }
+          // if (img.height === 400) {
+          newBanners.push(animeResult);
+          setBanners(newBanners);
+          // }
         };
       }
     }

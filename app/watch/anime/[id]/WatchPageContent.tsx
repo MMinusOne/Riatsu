@@ -11,13 +11,14 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import NextImage from "next/image";
 import axios from "axios";
-import ms from "ms";
 import {
   ContentEnvironmentState,
   PostiveEpisodeMeta,
-  SERVER_NAME,
+  SUB_OR_DUB,
 } from "@/types";
 import { useRouter } from "next/navigation";
+import servers from "@/constants/servernames";
+import useVideoControlsStore from "@/components/state/videoControls";
 
 export default function WatchPageContent({
   id,
@@ -27,22 +28,19 @@ export default function WatchPageContent({
   ep: number;
 }) {
   const router = useRouter();
-  if (!id) {
-    router.push("/");
-  }
+  const preVideoControls = useVideoControlsStore();
 
-  if (!ep) {
-    router.push(`/watch/anime/${id}?ep=1`);
-  }
-  const { data: animeData, isLoading: animeInfoLoading } = useQuery({
+  useEffect(() => {
+    if (!id) {
+      router.push("/");
+    } else if (!ep || !Number(ep)) {
+      router.push(`/watch/anime/${id}?ep=1`);
+    }
+  }, [id, ep, router]);
+
+  const { data: animeData, isLoading: animeDataLoading } = useQuery({
     queryKey: ["info", id],
     queryFn: () => getAnimeInfo(id),
-  });
-
-  const { data: episodesData, isLoading: episodeDataLoading } = useQuery({
-    queryKey: ["episodes-info", id],
-    queryFn: () => getEpisodesInfo(id),
-    staleTime: ms("1h"),
   });
 
   const [contentEnvironment, setContentEnvironment] =
@@ -61,18 +59,29 @@ export default function WatchPageContent({
         subtitles: [],
       },
       videoControls: {
-        autoSkipIntro: false,
-        autoSkipOutro: false,
-        server: SERVER_NAME.ZORO,
+        autoSkipIntro: preVideoControls.autoSkipIntro,
+        autoSkipOutro: preVideoControls.autoSkipOutro,
+        server: preVideoControls.server,
       },
     });
 
-  console.log(contentEnvironment);
+  const [episodes, setEpisodes] = useState([]);
+
+  useEffect(() => {
+    if (animeDataLoading) return;
+    if (preVideoControls.server.SUB_OR_DUB === SUB_OR_DUB.DUB) {
+      setEpisodes(animeData?.dubEpisodes);
+    } else if (
+      preVideoControls.server.SUB_OR_DUB === SUB_OR_DUB.SUB
+    ) {
+      setEpisodes(animeData?.subEpisodes);
+    }
+  }, [animeData, animeDataLoading, preVideoControls.server]);
 
   useEffect(() => {
     const stream = contentEnvironment?.stream;
     if (!stream?.currentStream) return;
-    const { url: streamUrl } = contentEnvironment?.stream?.currentStream!;
+    const { url: streamUrl } = stream.currentStream;
     if (!streamUrl) return;
 
     const proxySearchParams = new URLSearchParams();
@@ -81,64 +90,69 @@ export default function WatchPageContent({
       "headers",
       JSON.stringify({
         referrer: "https://hianime.to",
-        // origin: "https://hianime.to",
       })
     );
 
     const proxiedStream = `${process.env.NEXT_M3U8_PROXY}/m3u8-proxy?${proxySearchParams}`;
-    setContentEnvironment({
-      ...contentEnvironment,
+    setContentEnvironment((prev) => ({
+      ...prev,
       stream: {
-        ...contentEnvironment.stream,
+        ...prev.stream,
         proxiedStream,
       },
-    });
+    }));
   }, [contentEnvironment.stream.currentStream]);
 
   const getEpisodeInfo = async () => {
-    if (contentEnvironment?.episode?.meta?.id) {
+    if (contentEnvironment.episode.meta?.id) {
       try {
         const { data: streams } = await axios.post(
           `/api/anime/episodes/stream/`,
           {
-            episodeId: contentEnvironment?.episode?.meta?.id,
+            episodeId: contentEnvironment.episode.meta.id,
           }
         );
-        setContentEnvironment({
-          ...contentEnvironment,
+        setContentEnvironment((prev) => ({
+          ...prev,
           stream: {
-            ...contentEnvironment.stream,
+            ...prev.stream,
             loadingStream: false,
             streams: streams?.sources || [],
-            currentStream: streams?.sources?.at(0) || null,
+            currentStream: streams?.sources?.[0] || null,
             subtitles: streams?.subtitles || [],
             meta: {
               intro: streams.intro || 0,
-              outro: streams?.outro || 0,
+              outro: streams.outro || 0,
             },
           },
-        });
+        }));
+        console.log(contentEnvironment.stream);
       } catch (error) {
         console.error("Error fetching episode info:", error);
-        setContentEnvironment({
-          ...contentEnvironment,
+        setContentEnvironment((prev) => ({
+          ...prev,
           stream: {
-            ...contentEnvironment.stream,
+            ...prev.stream,
             loadingStream: true,
           },
-        });
+        }));
       }
     }
   };
 
   useEffect(() => {
     getEpisodeInfo();
-  }, [animeInfoLoading]);
+  }, [
+    ep,
+    contentEnvironment.episode.loadingEpisode,
+    animeDataLoading,
+    preVideoControls.server,
+  ]);
 
   useEffect(() => {
-    if (episodeDataLoading) return;
+    if (animeDataLoading) return;
     const episodeIndex = Number(ep) - 1;
-    const episodeData = episodesData.at(episodeIndex);
+    const episodeData = episodes.at(episodeIndex);
     if (!episodeData) {
       router.push(`/watch/anime/${id}?ep=1`);
       return;
@@ -148,12 +162,17 @@ export default function WatchPageContent({
       episode: {
         loadingEpisode: false,
         episodeIndex: episodeIndex,
-        meta: episodesData?.at(episodeIndex),
+        meta: episodeData,
+      },
+      videoControls: {
+        autoSkipIntro: preVideoControls.autoSkipIntro,
+        autoSkipOutro: preVideoControls.autoSkipOutro,
+        server: preVideoControls.server,
       },
     }));
-  }, [episodesData, episodeDataLoading, ep, id, router]);
+  }, [animeData, episodes, animeDataLoading, ep, id, router, preVideoControls]);
 
-  if (animeInfoLoading || episodeDataLoading) {
+  if (animeDataLoading) {
     return <div className="loading">Loading...</div>;
   }
 
@@ -163,7 +182,7 @@ export default function WatchPageContent({
         <div className="absolute inset-0 bg-gradient-to-t from-base-200/90 via-base-100/60 to-transparent" />
         <NextImage
           unoptimized
-          src={animeData.cover}
+          src={animeData.anilistInfo?.cover || animeData.zoroInfo?.image}
           fill
           alt="Background"
           className="absolute inset-0 opacity-20 blur-xl w-full h-full object-cover scale-110"
@@ -174,25 +193,46 @@ export default function WatchPageContent({
         <div className="p-4 text-sm breadcrumbs">
           <ul>
             <li>
-              <a>{animeData.title}</a>
+              <a>{animeData.zoroInfo.title}</a>
             </li>
-            {contentEnvironment?.episode.episodeIndex ? (
+            {contentEnvironment.episode.episodeIndex !== null ? (
               <li>Episode. {contentEnvironment.episode.episodeIndex + 1}</li>
             ) : null}
           </ul>
         </div>
 
         <div className="flex gap-4 p-4">
-          {!contentEnvironment.episode.loadingEpisode ? (
+          {episodes.length && !contentEnvironment.episode.loadingEpisode ? (
             <EpisodeDisplay
-              episodesData={episodesData}
-              selectedEpisode={contentEnvironment?.episode}
+              episodesData={episodes}
+              selectedEpisode={contentEnvironment.episode}
               onEpisodeSelect={(
                 episodeData: PostiveEpisodeMeta,
                 episodeIndex: number
               ) => {
+                if (episodeIndex === contentEnvironment.episode.episodeIndex)
+                  return;
+                setContentEnvironment((prev) => ({
+                  episode: {
+                    loadingEpisode: true,
+                    meta: null,
+                    episodeIndex: null,
+                  },
+                  stream: {
+                    loadingStream: true,
+                    meta: null,
+                    proxiedStream: null,
+                    currentStream: null,
+                    streams: [],
+                    subtitles: [],
+                  },
+                  videoControls: {
+                    autoSkipIntro: preVideoControls.autoSkipIntro,
+                    autoSkipOutro: preVideoControls.autoSkipOutro,
+                    server: preVideoControls.server,
+                  },
+                }));
                 router.push(`/watch/anime/${id}?ep=${episodeIndex + 1}`);
-                window.location.reload();
               }}
             />
           ) : null}
@@ -200,21 +240,27 @@ export default function WatchPageContent({
           <div className="flex-1">
             <VideoDisplay
               contentEnvironment={contentEnvironment}
-              animeData={animeData}
+              animeData={animeData.anilistInfo}
             />
             <ConfigurationDisplay
               contentEnvironment={contentEnvironment}
-              onSelectAutoSkipIntro={() => {}}
-              onSelectAutoSkipOutro={() => {}}
+              onSelectAutoSkipIntro={(selected) => {
+                preVideoControls.setAutoSkipIntro(selected);
+              }}
+              onSelectAutoSkipOutro={(selected) => {
+                preVideoControls.setAutoSkipOutro(selected);
+              }}
             />
             <ServerDisplay
               contentEnvironment={contentEnvironment}
-              selectedServer={SERVER_NAME.ZORO}
-              onServerSelect={() => {}}
+              selectedServer={contentEnvironment.videoControls.server}
+              onServerSelect={(server) => {
+                preVideoControls.setServer(servers[server.id]);
+              }}
             />
           </div>
 
-          <InfoDisplay animeData={animeData} />
+          <InfoDisplay animeData={animeData.anilistInfo} />
         </div>
       </div>
     </div>

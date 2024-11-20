@@ -6,12 +6,14 @@ import {
   MediaTimeUpdateEventDetail,
   Track,
 } from "@vidstack/react";
-import "@vidstack/react/player/styles/base.css";
+import '@vidstack/react/player/styles/default/theme.css';
+import '@vidstack/react/player/styles/default/layouts/audio.css';
+import '@vidstack/react/player/styles/default/layouts/video.css';
 import { useRef } from "react";
 
 export default function VideoDisplay(props: VideoDisplayProps) {
   const { contentEnvironment, animeData } = props;
-  const videoRef = useRef<MediaPlayerInstance>();
+  const videoRef = useRef<MediaPlayerInstance | null>(null); // Changed to allow null
 
   const handleTimeUpdate = (player: MediaTimeUpdateEventDetail) => {
     if (!player || !contentEnvironment.stream.meta || !videoRef.current) return;
@@ -58,16 +60,29 @@ export default function VideoDisplay(props: VideoDisplayProps) {
               controls
               playsInline
               onTimeUpdate={handleTimeUpdate}
+              streamType="on-demand"
+              viewType="video"
               src={contentEnvironment?.stream?.proxiedStream || ""}
               ref={videoRef}
             >
               <MediaProvider />
-              <Track
-                src={contentEnvironment?.stream?.subtitles?.at(0)?.url}
-                kind="subtitles"
-                label={contentEnvironment?.stream?.subtitles?.at(0)?.lang}
-                default
-              />
+
+              {contentEnvironment.stream.subtitles.map(
+                (subtitle, subtitleIndex) => {
+                  return (
+                    <Track
+                      key={subtitle.lang}
+                      src={`/api/content/vtt?url=${encodeURIComponent(
+                        subtitle?.url || ""
+                      )}`}
+                      kind="subtitles"
+                      language={subtitle.lang}
+                      label={subtitle.lang}
+                      default
+                    />
+                  );
+                }
+              )}
             </MediaPlayer>
           )}
         </div>

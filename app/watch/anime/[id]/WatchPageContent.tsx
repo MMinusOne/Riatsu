@@ -1,7 +1,6 @@
 "use client";
 
 import ConfigurationDisplay from "@/components/watch/ConfigurationDisplay/page";
-import getEpisodesInfo from "@/lib/services/anime/getEpisdesInfo";
 import EpisodeDisplay from "@/components/watch/EpisodeDisplay";
 import ServerDisplay from "@/components/watch/ServerDisplay";
 import VideoDisplay from "@/components/watch/VideoDisplay";
@@ -71,9 +70,7 @@ export default function WatchPageContent({
     if (animeDataLoading) return;
     if (preVideoControls.server.SUB_OR_DUB === SUB_OR_DUB.DUB) {
       setEpisodes(animeData?.dubEpisodes);
-    } else if (
-      preVideoControls.server.SUB_OR_DUB === SUB_OR_DUB.SUB
-    ) {
+    } else if (preVideoControls.server.SUB_OR_DUB === SUB_OR_DUB.SUB) {
       setEpisodes(animeData?.subEpisodes);
     }
   }, [animeData, animeDataLoading, preVideoControls.server]);
@@ -201,63 +198,81 @@ export default function WatchPageContent({
           </ul>
         </div>
 
-        <div className="flex gap-4 p-4">
-          {episodes.length && !contentEnvironment.episode.loadingEpisode ? (
-            <EpisodeDisplay
-              episodesData={episodes}
-              selectedEpisode={contentEnvironment.episode}
-              onEpisodeSelect={(
-                episodeData: PostiveEpisodeMeta,
-                episodeIndex: number
-              ) => {
-                if (episodeIndex === contentEnvironment.episode.episodeIndex)
-                  return;
-                setContentEnvironment((prev) => ({
-                  episode: {
-                    loadingEpisode: true,
-                    meta: null,
-                    episodeIndex: null,
-                  },
-                  stream: {
-                    loadingStream: true,
-                    meta: null,
-                    proxiedStream: null,
-                    currentStream: null,
-                    streams: [],
-                    subtitles: [],
-                  },
-                  videoControls: {
-                    autoSkipIntro: preVideoControls.autoSkipIntro,
-                    autoSkipOutro: preVideoControls.autoSkipOutro,
-                    server: preVideoControls.server,
-                  },
-                }));
-                router.push(`/watch/anime/${id}?ep=${episodeIndex + 1}`);
-              }}
-            />
-          ) : null}
+        <div className="flex lg:flex-row flex-col gap-4 p-4">
+          <div className="flex md:flex-row flex-col-reverse gap-[inherit] w-full">
+            {episodes.length && !contentEnvironment.episode.loadingEpisode ? (
+              <EpisodeDisplay
+                episodesData={episodes}
+                selectedEpisode={contentEnvironment.episode}
+                onEpisodeSelect={(
+                  episodeData: PostiveEpisodeMeta,
+                  episodeIndex: number
+                ) => {
+                  if (episodeIndex === contentEnvironment.episode.episodeIndex)
+                    return;
+                  setContentEnvironment((prev) => ({
+                    episode: {
+                      loadingEpisode: true,
+                      meta: null,
+                      episodeIndex: null,
+                    },
+                    stream: {
+                      loadingStream: true,
+                      meta: null,
+                      proxiedStream: null,
+                      currentStream: null,
+                      streams: [],
+                      subtitles: [],
+                    },
+                    videoControls: {
+                      autoSkipIntro: preVideoControls.autoSkipIntro,
+                      autoSkipOutro: preVideoControls.autoSkipOutro,
+                      server: preVideoControls.server,
+                    },
+                  }));
+                  router.push(`/watch/anime/${id}?ep=${episodeIndex + 1}`);
+                }}
+              />
+            ) : null}
 
-          <div className="flex-1">
-            <VideoDisplay
-              contentEnvironment={contentEnvironment}
-              animeData={animeData.anilistInfo}
-            />
-            <ConfigurationDisplay
-              contentEnvironment={contentEnvironment}
-              onSelectAutoSkipIntro={(selected) => {
-                preVideoControls.setAutoSkipIntro(selected);
-              }}
-              onSelectAutoSkipOutro={(selected) => {
-                preVideoControls.setAutoSkipOutro(selected);
-              }}
-            />
-            <ServerDisplay
-              contentEnvironment={contentEnvironment}
-              selectedServer={contentEnvironment.videoControls.server}
-              onServerSelect={(server) => {
-                preVideoControls.setServer(servers[server.id]);
-              }}
-            />
+            <div className="flex-1">
+              <VideoDisplay
+                contentEnvironment={contentEnvironment}
+                animeData={animeData.anilistInfo}
+              />
+              <ConfigurationDisplay
+                contentEnvironment={contentEnvironment}
+                onSelectAutoSkipIntro={(selected) => {
+                  preVideoControls.setAutoSkipIntro(selected);
+                }}
+                onSelectAutoSkipOutro={(selected) => {
+                  preVideoControls.setAutoSkipOutro(selected);
+                }}
+              />
+              <ServerDisplay
+                contentEnvironment={contentEnvironment}
+                selectedServer={contentEnvironment.videoControls.server}
+                onServerSelect={(server) => {
+                  setContentEnvironment((prev) => ({
+                    episode: {
+                      loadingEpisode: true,
+                      meta: null,
+                      episodeIndex: null,
+                    },
+                    stream: {
+                      loadingStream: true,
+                      meta: null,
+                      proxiedStream: null,
+                      currentStream: null,
+                      streams: [],
+                      subtitles: [],
+                    },
+                    videoControls: prev.videoControls,
+                  }));
+                  preVideoControls.setServer(servers[server.id]);
+                }}
+              />
+            </div>
           </div>
 
           <InfoDisplay animeData={animeData.anilistInfo} />

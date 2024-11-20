@@ -1,4 +1,4 @@
-import Header from "@/components/home/Header";
+import Header from "@/components/misc/Header";
 import SearchContentPage from "./SearchContentPage";
 
 export default async function SearchPage({

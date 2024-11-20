@@ -26,7 +26,7 @@ export default function Banner(props: { data: IAnimeResult[] }) {
 
   return (
     <>
-      <div className="relative w-full h-[200px] md:h-[400px] lg:h-[600px]">
+      <div className="relative w-full h-[300px] lg:h-[600px]">
         {banners.length > 0 && (
           <Carousel
             showArrows={false} // Disable swipe left and right buttons

@@ -10,10 +10,10 @@ export function ContentCard(props: IAnimeResult) {
   return (
     <>
       <Link
-        className="relative flex flex-col w-[105px] sm:w-[135px] md:w-[155px] xl:w-[175px] h-full hover:cursor-pointer group"
+        className="relative flex flex-col w-[135px] sm:w-[135px] md:w-[155px] xl:w-[175px] h-full hover:cursor-pointer group"
         href={`/watch/${props.cardType}/${props.id}`}
       >
-        <div className="relative rounded-xl xl:rounded-2xl w-[105px] sm:w-[135px] md:w-[155px] xl:w-[175px] h-[160px] sm:h-[190px] md:h-[230px] xl:h-[255px] overflow-hidden">
+        <div className="relative rounded-xl xl:rounded-2xl w-[inherit] sm:w-[inherit] md:w-[155px] xl:w-[175px] h-[200px] sm:h-[190px] md:h-[230px] xl:h-[255px] overflow-hidden">
           <div
             className={`flex-shrink-0 bg-[#1e1e24] shadow-[4px_0px_5px_0px_rgba(0,0,0,0.3)] rounded-xl xl:rounded-2xl w-full h-full overflow-hidden group ${
               cardImageLoaded ? null : "skeleton"

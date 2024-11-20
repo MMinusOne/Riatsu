@@ -5,20 +5,20 @@ export default function EpisodeDisplay(props: EpisodeDisplayProps) {
   if (!episodesData) return <></>;
   return (
     <>
-      <div className="bg-base-200 rounded-lg w-72 h-screen">
-        <div className="bg-base-300 p-4 h-full">
-          <div className="w-full max-h-full overflow-hidden overflow-y-scroll join join-vertical">
+      <div className="bg-base-200 rounded-lg w-full md:w-72 h-1/2 md:h-screen">
+        <div className="bg-base-300 p-4 w-full h-full">
+          <div className="w-full max-h-full overflow-hidden overflow-y-auto join join-vertical">
             {episodesData.map((episodeData, episodeIndex) => (
               <button
                 key={episodeIndex}
                 onClick={() => onEpisodeSelect(episodeData, episodeIndex)}
-                className={`justify-start btn join-item truncate text-sm ${
+                className={`justify-start btn join-item text-sm w-full ${
                   episodeIndex === selectedEpisode.episodeIndex
                     ? "btn-primary"
                     : "btn-ghost"
-                }`}
+                } hover:btn-primary`}
               >
-                {episodeData.title}
+                <span className="text-center truncate">{episodeData.title}</span>
               </button>
             ))}
           </div>

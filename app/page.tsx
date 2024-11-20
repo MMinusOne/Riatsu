@@ -3,7 +3,7 @@
 import { IAnimeResult, MediaStatus } from "@consumet/extensions";
 import ContentTable from "@/components/home/ContentTable/index";
 import getTrendingAnime from "@/lib/services/anime/getTrending";
-import Header from "@/components/home/Header";
+import Header from "@/components/misc/Header";
 import Banner from "@/components/home/Banner";
 import { useQuery } from "@tanstack/react-query";
 import ms from "ms";

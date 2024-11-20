@@ -9,8 +9,8 @@ export default function Header() {
   const router = useRouter();
   return (
     <>
-      <div className="p-4 navbar">
-        <div className="flex-1 gap-4">
+      <div className="p-1 md:p-4 navbar">
+        <div className="flex-1 gap-1 md:gap-4">
           <Link href="/" className="cursor-pointer">
             <NextImage
               src="/assets/logo_full.png"
@@ -23,7 +23,7 @@ export default function Header() {
             <div>
               <div>
                 <input
-                  className="input-bordered w-72 input join-item"
+                  className="input-bordered w-32 md:w-72 input join-item"
                   placeholder="Search"
                   id="search"
                 />
@@ -46,19 +46,18 @@ export default function Header() {
               </button>
             </div>
           </div>
-          <button className="btn btn-square">
+          <button className="md:flex hidden mx-2 btn btn-disabled btn-square disabled">
             <FaRandom />
           </button>
-          <div className="join join-vertical lg:join-horizontal">
-            <button className="btn join-item">EN</button>
-            <button className="btn join-item">JP</button>
-          </div>
         </div>
         <div className="flex-none">
-          <button className="btn btn-secondary">
+          <Link
+            href="https://discord.gg/DyR6ZStnTN"
+            className="mx-3 btn btn-secondary"
+          >
             Join Discord
             <FaDiscord />
-          </button>
+          </Link>
         </div>
       </div>
     </>

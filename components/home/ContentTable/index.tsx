@@ -25,27 +25,29 @@ export default function ContentTable(props: {
 
   return (
     <>
-      <div className="flex flex-col gap-0">
+      <div className="flex flex-col justify-center items-center gap-0 h-72">
         <div className="flex p-2">
           <p className="font-semibold text-xl">{props.title}</p>
         </div>
-        <div className="flex px-6 p-2 w-full h-72">
+        <div className="flex justify-center items-center px-1 md:px-6 p-2 w-full h-full md:h-80">
           <div
-            className="flex gap-20 w-full h-fit overflow-hidden"
+            className="flex gap-20 w-full h-full md:h-fit overflow-hidden"
             ref={scrollRef}
           >
             {props?.data?.map((cardInfo: IAnimeResult) => {
               return (
-                <ContentCard
+               <div className="h-full">
+                 <ContentCard
                   {...cardInfo}
                   cardType={props.type}
                   key={cardInfo.id}
                 />
+               </div>
               );
             })}
           </div>
 
-          <div className="flex flex-col gap-3 p-2 h-[inherit]">
+          <div className="flex flex-col items-center gap-3 py-4 p-2 h-full">
             <button
               className="h-1/2 btn btn-square"
               onClick={() => scroll("right")}

@@ -1,6 +1,6 @@
 "use client";
 
-import Header from "@/components/home/Header";
+import Header from "@/components/misc/Header";
 import getAnimeInfo from "@/lib/services/anime/getInfo";
 import getMangaInfo from "@/lib/services/manga/getInfo";
 import getMovieInfo from "@/lib/services/movies/getInfo";
@@ -63,8 +63,12 @@ export function ClientWiki(props: {
             </div>
 
             <div>
-              <h1 className="mb-2 font-bold text-4xl">{contentData.zoroInfo.title}</h1>
-              <h2 className="mb-4 text-xl">{contentData.anilistInfo.originalTitle}</h2>
+              <h1 className="mb-2 font-bold text-4xl">
+                {contentData.zoroInfo.title}
+              </h1>
+              <h2 className="mb-4 text-xl">
+                {contentData.anilistInfo.originalTitle}
+              </h2>
 
               <div className="flex items-center gap-4 mb-6">
                 <div className="flex items-center gap-2">

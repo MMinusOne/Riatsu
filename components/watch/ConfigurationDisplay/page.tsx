@@ -35,7 +35,7 @@ export default function ConfigurationDisplay(props: ConfigurationDisplayProps) {
         <div className="flex-1"></div>
         <div>
           {" "}
-          <button className="btn btn-disabled btn-secondary disabled">Download</button>
+          <button className="md:flex hidden btn btn-disabled btn-secondary disabled">Download</button>
         </div>
       </div>
     </>

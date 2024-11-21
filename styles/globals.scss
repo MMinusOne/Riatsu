@@ -4,6 +4,7 @@
 
 *, *::before, *::after { 
     transition: all 0.05ms linear;
+    box-sizing: border-box;
 }
 
 ::selection { 

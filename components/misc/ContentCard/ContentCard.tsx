@@ -10,7 +10,7 @@ export function ContentCard(props: IAnimeResult) {
   return (
     <>
       <Link
-        className="relative flex flex-col justify-center items-center w-[135px] sm:w-[135px] md:w-[155px] xl:w-[175px] h-full hover:cursor-pointer group"
+        className="relative flex flex-col w-[135px] sm:w-[135px] md:w-[155px] xl:w-[175px] h-full hover:cursor-pointer group"
         href={`/watch/${props.cardType}/${props.id}`}
       >
         <div className="relative rounded-xl xl:rounded-2xl w-[inherit] sm:w-[inherit] md:w-[155px] xl:w-[175px] h-[200px] sm:h-[190px] md:h-[230px] xl:h-[255px] overflow-hidden">

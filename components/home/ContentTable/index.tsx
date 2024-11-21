@@ -36,7 +36,7 @@ export default function ContentTable(props: {
           >
             {props?.data?.map((cardInfo: IAnimeResult) => {
               return (
-               <div className="h-full">
+               <div className="flex justify-center items-center h-full">
                  <ContentCard
                   {...cardInfo}
                   cardType={props.type}

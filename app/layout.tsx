@@ -3,6 +3,7 @@
 import useThemeStore from "@/components/state/themeStore";
 import "@/styles/globals.scss";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import themes from "@/constants/themes"; // Import themes
 
 const queryClient = new QueryClient();
 
@@ -12,6 +13,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const themeStore = useThemeStore();
+
+  const handleThemeChange = (theme: string) => {
+    themeStore.setTheme(theme);
+  };
 
   return (
     <html
@@ -31,8 +36,28 @@ export default function RootLayout({
         <meta property="og:image" content="/assets/logo_full.png" />
         <title>Riatsu</title>
       </head>
+
       <body className="m-0 p-0 w-full h-full">
         <QueryClientProvider client={queryClient}>
+          <dialog id="theme_modal" className="modal">
+            <div className="modal-box">
+              <h2 className="font-semibold text-lg">Select Theme</h2>
+              <div className="flex flex-col gap-2 mt-4">
+                {themes.map((theme) => (
+                  <button
+                    key={theme}
+                    className="btn"
+                    onClick={() => handleThemeChange(theme)}
+                  >
+                    {theme.charAt(0).toUpperCase() + theme.slice(1)}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <form method="dialog" className="modal-backdrop">
+              <button>close</button>
+            </form>
+          </dialog>
           {children}
         </QueryClientProvider>
       </body>

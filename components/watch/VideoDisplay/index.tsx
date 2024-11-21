@@ -78,7 +78,7 @@ export default function VideoDisplay(props: VideoDisplayProps) {
                       kind="subtitles"
                       language={subtitle.lang}
                       label={subtitle.lang}
-                      default
+                      default={subtitleIndex === 0} // Set only the first subtitle as default
                     />
                   );
                 }

@@ -166,7 +166,7 @@ function Search({ handleSearch, searchInputRef }: SearchProps) {
   return (
     <>
       <form onSubmit={handleSearch} className="join">
-        <div className="w-full md:w-auto">
+        <div className="w-auto">
           <input
             ref={searchInputRef}
             className="input-bordered w-full md:w-72 input join-item"

@@ -68,7 +68,7 @@ export default function VideoDisplay(props: VideoDisplayProps) {
               <MediaProvider />
 
               {contentEnvironment.stream.subtitles.map(
-                (subtitle, subtitleIndex) => {
+                (subtitle) => {
                   return (
                     <Track
                       key={subtitle.lang}
@@ -78,7 +78,7 @@ export default function VideoDisplay(props: VideoDisplayProps) {
                       kind="subtitles"
                       language={subtitle.lang}
                       label={subtitle.lang}
-                      default={subtitleIndex === 0} // Set only the first subtitle as default
+                      default={false} 
                     />
                   );
                 }

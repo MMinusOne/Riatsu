@@ -100,7 +100,7 @@ export default function Header() {
       </div>
       {searchEnabled ? (
         <>
-          <div className="flex justify-center items-center md:hidden p-2 w-full">
+          <div className="flex justify-center items-center md:hidden w-full">
             <Search
               handleSearch={handleSearch}
               searchInputRef={searchInputRef}

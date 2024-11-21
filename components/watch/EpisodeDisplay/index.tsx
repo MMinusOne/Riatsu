@@ -18,7 +18,9 @@ export default function EpisodeDisplay(props: EpisodeDisplayProps) {
                     : "btn-ghost"
                 } hover:btn-primary`}
               >
-                <span className="text-center truncate">{episodeData.title}</span>
+                <span className="text-center truncate">
+                  {episodeIndex + 1}. {episodeData.title}
+                </span>
               </button>
             ))}
           </div>

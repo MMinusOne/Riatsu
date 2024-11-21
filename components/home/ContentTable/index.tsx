@@ -25,9 +25,9 @@ export default function ContentTable(props: {
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center gap-0 h-72">
-        <div className="flex p-2">
-          <p className="font-semibold text-xl">{props.title}</p>
+      <div className="flex flex-col justify-center items-center gap-0 h-96">
+        <div className="flex items-start p-2 w-full">
+          <p className="font-semibold text-xl md:text-2xl">{props.title}</p>
         </div>
         <div className="flex justify-center items-center px-1 md:px-6 p-2 w-full h-full md:h-80">
           <div

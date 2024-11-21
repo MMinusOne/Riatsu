@@ -5,7 +5,7 @@ export default function InfoDisplay(props: InfoDisplayProps) {
   const { animeData } = props;
   return (
     <>
-      <div className="lg:block flex bg-base-200 p-4 rounded-lg w-full lg:w-80">
+      <div className="lg:block flex bg-base-200 p-4 rounded-lg w-full lg:w-80 h-none md:h-full">
         <div className="lg:flex-row flex-col w-full">
           <img
             src={animeData.image}
@@ -24,7 +24,7 @@ export default function InfoDisplay(props: InfoDisplayProps) {
             ))}
           </div>
         </div>
-        <div className="lg:flex-row flex-col w-full h-full">
+        <div className="lg:flex-row flex-col p-4 lg:p-0 w-full h-full">
           <p className="mt-4 p-4 lg:p-1 text-sm">
             <span
               dangerouslySetInnerHTML={{ __html: animeData.description }}

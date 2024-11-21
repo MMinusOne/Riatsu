@@ -18,6 +18,7 @@ import {
 import { useRouter } from "next/navigation";
 import servers from "@/constants/servernames";
 import useVideoControlsStore from "@/components/state/videoControls";
+import Loading from "@/app/loading";
 
 export default function WatchPageContent({
   id,
@@ -32,7 +33,7 @@ export default function WatchPageContent({
   useEffect(() => {
     if (!id) {
       router.push("/");
-    } else if (!ep || !Number(ep)) {
+    } else if (!ep || !Number(ep) || ep <= 0) {
       router.push(`/watch/anime/${id}?ep=1`);
     }
   }, [id, ep, router]);
@@ -65,6 +66,12 @@ export default function WatchPageContent({
     });
 
   const [episodes, setEpisodes] = useState([]);
+
+  useEffect(() => {
+    if (episodes.length > 0 && !episodes.at(ep)) {
+      router.push(`/watch/anime/${id}?ep=1`);
+    }
+  }, [episodes]);
 
   useEffect(() => {
     if (animeDataLoading) return;
@@ -170,7 +177,7 @@ export default function WatchPageContent({
   }, [animeData, episodes, animeDataLoading, ep, id, router, preVideoControls]);
 
   if (animeDataLoading) {
-    return <div className="loading">Loading...</div>;
+    return <Loading headless={true} />;
   }
 
   return (
@@ -247,6 +254,29 @@ export default function WatchPageContent({
                 }}
                 onSelectAutoSkipOutro={(selected) => {
                   preVideoControls.setAutoSkipOutro(selected);
+                }}
+                onClickNext={() => {
+                  if (contentEnvironment.episode.loadingEpisode) return;
+                  const currentUrl = new URL(window.location.href);
+                  const nextEpisodeNumber = Number(ep) + 1;
+                  if (!episodes.at(nextEpisodeNumber)) return;
+                  currentUrl.searchParams.set(
+                    "ep",
+                    nextEpisodeNumber.toString()
+                  );
+                  console.log(currentUrl.toString());
+                  router.push(currentUrl.toString());
+                }}
+                onClickPrevious={() => {
+                  if (contentEnvironment.episode.loadingEpisode) return;
+                  const currentUrl = new URL(window.location.href);
+                  const nextEpisodeNumber = Number(ep) - 1;
+                  if (!episodes.at(nextEpisodeNumber)) return;
+                  currentUrl.searchParams.set(
+                    "ep",
+                    nextEpisodeNumber.toString()
+                  );
+                  router.push(currentUrl.toString());
                 }}
               />
               <ServerDisplay

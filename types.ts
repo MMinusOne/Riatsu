@@ -118,6 +118,12 @@ export interface ConfigurationDisplayProps {
   contentEnvironment: ContentEnvironmentState;
   onSelectAutoSkipIntro: (selected: boolean) => void;
   onSelectAutoSkipOutro: (selected: boolean) => void;
+  onClickPrevious: () => void;
+  onClickNext: () => void;
+}
+
+export interface LoadingProps {
+  headless?: boolean;
 }
 
 export interface ServerDisplayProps {

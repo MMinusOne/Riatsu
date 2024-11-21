@@ -1,13 +1,13 @@
 import { ConfigurationDisplayProps } from "@/types";
 
 export default function ConfigurationDisplay(props: ConfigurationDisplayProps) {
-  const { contentEnvironment, onSelectAutoSkipIntro, onSelectAutoSkipOutro } =
+  const { contentEnvironment, onSelectAutoSkipIntro, onSelectAutoSkipOutro, onClickPrevious, onClickNext } =
     props;
   return (
     <>
       <div className="flex items-center gap-2 mt-4">
-        <button className="btn btn-primary">Previous</button>
-        <button className="btn btn-primary">Next</button>
+        <button onClick={onClickPrevious} className="btn btn-primary">Previous</button>
+        <button onClick={onClickNext} className="btn btn-primary">Next</button>
         <div className="form-control">
           <label className="gap-3 cursor-pointer label">
             <span className="label-text">Skip Intro</span>
@@ -35,7 +35,7 @@ export default function ConfigurationDisplay(props: ConfigurationDisplayProps) {
         <div className="flex-1"></div>
         <div>
           {" "}
-          <button className="btn btn-secondary">Download</button>
+          <button className="btn btn-disabled btn-secondary disabled">Download</button>
         </div>
       </div>
     </>

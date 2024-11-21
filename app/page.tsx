@@ -20,6 +20,7 @@ export default function Home() {
     queryKey: ["spotlight-anime"],
     staleTime: ms("12h"),
   });
+
   return (
     <>
       <div className="flex flex-col gap-3">

@@ -34,6 +34,7 @@
     "react-responsive-carousel": "^3.2.23",
     "sass": "^1.80.6",
     "tailwindcss": "^3.4.14",
+    "use-throttle": "^0.0.3",
     "vidstack": "^0.6.15",
     "zustand": "^5.0.1"
   },

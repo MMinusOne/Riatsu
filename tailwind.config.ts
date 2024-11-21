@@ -8,7 +8,7 @@ const config: Config = {
   ],
   plugins: [require('daisyui')],
   daisyui: {
-    themes: ["black"]
+    themes: ["black", "sunset", "white", "nord"]
   }
 };
 export default config;

@@ -17,7 +17,7 @@ import {
 } from "@/types";
 import { useRouter } from "next/navigation";
 import servers from "@/constants/servernames";
-import useVideoControlsStore from "@/components/state/videoControls";
+import useVideoControlsStore from "@/components/state/videoControlsStore";
 import Loading from "@/app/loading";
 
 export default function WatchPageContent({

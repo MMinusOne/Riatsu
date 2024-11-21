@@ -6,11 +6,11 @@ export default function ServerDisplay(props: ServerDisplayProps) {
 
   return (
     <>
-      <div className="flex bg-base-200 bg-opacity-20 backdrop-blur-lg mt-4 w-full h-40">
+      <div className="flex bg-base-200 bg-opacity-80 backdrop-blur-lg mt-4 w-full h-40">
         <div className="bg-primary bg-opacity-30 backdrop-blur-2xl p-2 h-full aspect-square">
           <span className="flex flex-col justify-center items-center gap-4 w-full h-full font-normal text-center text-md">
-            Note: If current server doesn't work please try other servers
-            beside.
+            Note: If the current server doesn't work, please try other servers
+            nearby.
           </span>
         </div>
         <div className="flex flex-col w-full h-full">

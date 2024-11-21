@@ -74,6 +74,9 @@ importers:
       tailwindcss:
         specifier: ^3.4.14
         version: 3.4.14
+      use-throttle:
+        specifier: ^0.0.3
+        version: 0.0.3
       vidstack:
         specifier: ^0.6.15
         version: 0.6.15
@@ -1985,6 +1988,9 @@ packages:
 
   url-polyfill@1.1.12:
     resolution: {integrity: sha512-mYFmBHCapZjtcNHW0MDq9967t+z4Dmg5CJ0KqysK3+ZbyoNOWQHksGCTWwDhxGXllkWlOc10Xfko6v4a3ucM6A==}
+
+  use-throttle@0.0.3:
+    resolution: {integrity: sha512-cgA3c+pe6V7cZ7pkLnYnWxXJub2AmksY7YTp/xiZzKesQyECJ1slWknVY2CVZOBf48avbZsAvJIDjO+aFu9+pw==}
 
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
@@ -4455,6 +4461,8 @@ snapshots:
       picocolors: 1.1.1
 
   url-polyfill@1.1.12: {}
+
+  use-throttle@0.0.3: {}
 
   util-deprecate@1.0.2: {}
 

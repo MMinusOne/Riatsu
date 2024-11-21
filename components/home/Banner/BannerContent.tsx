@@ -20,7 +20,7 @@ export default function BannerContent(bannerData: IAnimeResult) {
           <div className="absolute inset-0 bg-gradient-to-t from-base-100/80 to-transparent" />
         </div>
         <div className="bottom-0 left-0 absolute flex flex-col gap-3 p-4 w-full md:w-1/2 h-1/2">
-          <span className="opacity-80 font-black text-lg text-start md:text-center md:text-3xl truncate">
+          <span className="opacity-80 font-black text-lg text-start md:text-start md:text-3xl truncate">
             {/**@ts-ignore */}
             {bannerData.title}
           </span>

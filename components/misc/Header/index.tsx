@@ -151,7 +151,7 @@ function ThemeModal() {
           }
         }}
       >
-        open modal
+        Theme <FaArrowDown />
       </button>
     </>
   );

@@ -283,6 +283,7 @@ export default function WatchPageContent({
                 contentEnvironment={contentEnvironment}
                 selectedServer={contentEnvironment.videoControls.server}
                 onServerSelect={(server) => {
+                  preVideoControls.setServer(servers[server.id]);
                   setContentEnvironment((prev) => ({
                     episode: {
                       loadingEpisode: true,
@@ -297,9 +298,11 @@ export default function WatchPageContent({
                       streams: [],
                       subtitles: [],
                     },
-                    videoControls: prev.videoControls,
+                    videoControls: {
+                      ...prev.videoControls,
+                      server: servers[server.id],
+                    },
                   }));
-                  preVideoControls.setServer(servers[server.id]);
                 }}
               />
             </div>

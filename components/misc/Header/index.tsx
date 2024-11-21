@@ -3,7 +3,7 @@
 import Logo from "@/components/assets/Logo";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FaSearch, FaDiscord, FaRandom } from "react-icons/fa";
+import { FaSearch, FaDiscord, FaRandom, FaArrowDown } from "react-icons/fa";
 import { useRef } from "react";
 import useThemeStore from "@/components/state/themeStore";
 
@@ -22,9 +22,8 @@ export default function Header() {
     }
   };
 
-  const handleThemeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedTheme = event.target.value;
-    themeStore.setTheme(selectedTheme);
+  const handleThemeChange = (theme: string) => {
+    themeStore.setTheme(theme);
   };
 
   return (
@@ -32,7 +31,10 @@ export default function Header() {
       <div className="p-1 md:p-4 navbar">
         <div className="flex-1 gap-1 md:gap-4">
           <Link href="/" className="cursor-pointer">
-            <Logo className="fill-primary-content" />
+            <Logo
+              stroke={{ className: "fill-primary" }}
+              text={{ className: "fill-primary-content" }}
+            />
           </Link>
           <form onSubmit={handleSearch} className="join">
             <div>
@@ -57,16 +59,23 @@ export default function Header() {
           </button>
         </div>
         <div className="flex-none">
-          <select
-            onChange={handleThemeChange}
-            className="select-bordered select"
-            defaultValue={themeStore.theme}
-          >
-            <option value="black">Black</option>
-            <option value="sunset">Sunset</option>
-            <option value="nord">Nord</option>
-            <option value="white">White</option>
-          </select>
+          <div className="dropdown">
+            <div tabIndex={0} role="button" className="m-1 btn">
+              Theme <FaArrowDown />
+            </div>
+            <ul
+              tabIndex={0}
+              className="z-[1] bg-base-100 shadow p-2 rounded-box w-52 dropdown-content menu"
+            >
+              {["black", "sunset", "nord", "white"].map((theme) => (
+                <li key={theme}>
+                  <a onClick={() => handleThemeChange(theme)}>
+                    {theme.charAt(0).toUpperCase() + theme.slice(1)}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
           <Link
             href="https://discord.gg/DyR6ZStnTN"
             className="mx-3 btn btn-secondary"

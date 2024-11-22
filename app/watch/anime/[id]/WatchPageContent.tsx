@@ -75,10 +75,37 @@ export default function WatchPageContent({
 
   useEffect(() => {
     if (animeDataLoading) return;
-    if (preVideoControls.server.SUB_OR_DUB === SUB_OR_DUB.DUB) {
-      setEpisodes(animeData?.dubEpisodes);
-    } else if (preVideoControls.server.SUB_OR_DUB === SUB_OR_DUB.SUB) {
-      setEpisodes(animeData?.subEpisodes);
+    const { server } = contentEnvironment.videoControls;
+    if (!server.available) return;
+
+    setContentEnvironment((prev) => ({
+      episode: {
+        loadingEpisode: true,
+        meta: null,
+        episodeIndex: null,
+      },
+      stream: {
+        loadingStream: true,
+        meta: null,
+        proxiedStream: null,
+        currentStream: null,
+        streams: [],
+        subtitles: [],
+      },
+      videoControls: {
+        ...prev.videoControls,
+        server: servers[server.id],
+      },
+    }));
+
+    setEpisodes([]);
+    console.log("The current server type is", server.SUB_OR_DUB);
+    const { subEpisodes, dubEpisodes } = animeData;
+    if (server.SUB_OR_DUB === SUB_OR_DUB.DUB) {
+      setEpisodes(dubEpisodes);
+    }
+    if (server.SUB_OR_DUB === SUB_OR_DUB.SUB) {
+      setEpisodes(subEpisodes);
     }
   }, [animeData, animeDataLoading, preVideoControls.server]);
 
@@ -98,6 +125,7 @@ export default function WatchPageContent({
     );
 
     const proxiedStream = `${process.env.NEXT_M3U8_PROXY}/m3u8-proxy?${proxySearchParams}`;
+
     setContentEnvironment((prev) => ({
       ...prev,
       stream: {
@@ -148,6 +176,7 @@ export default function WatchPageContent({
     getEpisodeInfo();
   }, [
     ep,
+    episodes,
     contentEnvironment.episode.loadingEpisode,
     animeDataLoading,
     preVideoControls.server,
@@ -284,25 +313,6 @@ export default function WatchPageContent({
                 selectedServer={contentEnvironment.videoControls.server}
                 onServerSelect={(server) => {
                   preVideoControls.setServer(servers[server.id]);
-                  setContentEnvironment((prev) => ({
-                    episode: {
-                      loadingEpisode: true,
-                      meta: null,
-                      episodeIndex: null,
-                    },
-                    stream: {
-                      loadingStream: true,
-                      meta: null,
-                      proxiedStream: null,
-                      currentStream: null,
-                      streams: [],
-                      subtitles: [],
-                    },
-                    videoControls: {
-                      ...prev.videoControls,
-                      server: servers[server.id],
-                    },
-                  }));
                 }}
               />
             </div>

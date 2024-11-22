@@ -4,38 +4,12 @@ import {
   MediaPlayerInstance,
   MediaProvider,
   MediaTimeUpdateEventDetail,
-  Poster,
   Track,
-  QualitySlider,
-  Controls,
-  ToggleButton,
-  Menu,
-  Time,
-  TimeSlider,
-  Volume,
-  PlayButton,
-  MuteButton,
-  FullscreenButton,
-  CaptionButton,
-  SeekButton,
-  MenuButton,
-  MenuItem,
-  MenuPortal,
-  Tooltip,
-  VolumeSlider,
 } from "@vidstack/react";
 import "@vidstack/react/player/styles/default/theme.css";
 import "@vidstack/react/player/styles/default/layouts/audio.css";
 import "@vidstack/react/player/styles/default/layouts/video.css";
 import { useRef } from "react";
-import { 
-  FaHeart, 
-  FaThumbsDown, 
-  FaThumbsUp,
-  FaCog,
-  FaBackward,
-  FaForward
-} from "react-icons/fa";
 
 export default function VideoDisplay(props: VideoDisplayProps) {
   const { contentEnvironment, animeData } = props;
@@ -106,46 +80,7 @@ export default function VideoDisplay(props: VideoDisplayProps) {
                   />
                 );
               })}
-              
-              <Controls.Root className="controls-root">
-                {/* Time Slider */}
-                <Controls.Group className="controls-group">
-                  <TimeSlider.Root className="time-slider" />
-                </Controls.Group>
 
-                {/* Bottom Controls */}
-                <Controls.Group className="bottom controls-group">
-                  <PlayButton className="play-button" />
-                  <SeekButton seconds={-10}>
-                    <FaBackward className="w-4 h-4" />
-                  </SeekButton>
-                  <SeekButton seconds={10}>
-                    <FaForward className="w-4 h-4" />
-                  </SeekButton>
-                  {/* <Volume> */}
-                    {/* <MuteButton /> */}
-                    {/* <VolumeSlider/> */}
-                  {/* </Volume> */}
-                  <Time className="time" />
-                  
-                  <div className="flex items-center gap-2 ml-auto">
-                    {/* <Menu.Root> */}
-                      {/* <MenuButton className="menu-button">
-                        <FaCog className="w-4 h-4" />
-                      </MenuButton> */}
-                      {/* <MenuPortal> */}
-                        {/* <Menu.Content className="menu-content"> */}
-                          {/* <Menu.RadioGroup className="quality-radio-group"> */}
-                            {/* <QualitySlider /> */}
-                          {/* </Menu.RadioGroup> */}
-                        {/* </Menu.Content> */}
-                      {/* </MenuPortal> */}
-                    {/* </Menu.Root> */}
-                    <CaptionButton />
-                    <FullscreenButton />
-                  </div>
-                </Controls.Group>
-              </Controls.Root>
 
             </MediaPlayer>
           )}

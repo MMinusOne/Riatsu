@@ -71,13 +71,12 @@ export default function WatchPageContent({
     if (episodes.length > 0 && !episodes.at(ep)) {
       router.push(`/watch/anime/${id}?ep=1`);
     }
-  }, [episodes]);
+  }, [id, episodes]);
 
   useEffect(() => {
     if (animeDataLoading) return;
-    const { server } = contentEnvironment.videoControls;
+    const { server } = preVideoControls;
     if (!server.available) return;
-
     setContentEnvironment((prev) => ({
       episode: {
         loadingEpisode: true,
@@ -94,20 +93,20 @@ export default function WatchPageContent({
       },
       videoControls: {
         ...prev.videoControls,
-        server: servers[server.id],
+        server,
       },
     }));
-
     setEpisodes([]);
-    console.log("The current server type is", server.SUB_OR_DUB);
     const { subEpisodes, dubEpisodes } = animeData;
-    if (server.SUB_OR_DUB === SUB_OR_DUB.DUB) {
-      setEpisodes(dubEpisodes);
+    switch (server.SUB_OR_DUB) {
+      case SUB_OR_DUB.DUB:
+        setEpisodes(dubEpisodes);
+        break;
+      case SUB_OR_DUB.SUB:
+        setEpisodes(subEpisodes);
+        break;
     }
-    if (server.SUB_OR_DUB === SUB_OR_DUB.SUB) {
-      setEpisodes(subEpisodes);
-    }
-  }, [animeData, animeDataLoading, preVideoControls.server]);
+  }, [animeData, animeDataLoading, preVideoControls]);
 
   useEffect(() => {
     const stream = contentEnvironment?.stream;
@@ -135,52 +134,49 @@ export default function WatchPageContent({
     }));
   }, [contentEnvironment.stream.currentStream]);
 
-  const getEpisodeInfo = async () => {
-    if (contentEnvironment.episode.meta?.id) {
-      try {
-        const { data: streams } = await axios.post(
-          `/api/anime/episodes/stream/`,
-          {
-            episodeId: contentEnvironment.episode.meta.id,
-          }
-        );
-        setContentEnvironment((prev) => ({
-          ...prev,
-          stream: {
-            ...prev.stream,
-            loadingStream: false,
-            streams: streams?.sources || [],
-            currentStream: streams?.sources?.[0] || null,
-            subtitles: streams?.subtitles || [],
-            meta: {
-              intro: streams.intro || 0,
-              outro: streams.outro || 0,
-            },
+  const getEpisodeInfo = async (episodeId: string) => {
+    if (!episodeId) return;
+
+    try {
+      console.log(contentEnvironment.episode.meta);
+      const { data: streams } = await axios.post(
+        `/api/anime/episodes/stream/`,
+        {
+          episodeId,
+        }
+      );
+      setContentEnvironment((prev) => ({
+        ...prev,
+        stream: {
+          ...prev.stream,
+          loadingStream: false,
+          streams: streams?.sources || [],
+          currentStream: streams?.sources?.[0] || null,
+          subtitles: streams?.subtitles || [],
+          meta: {
+            intro: streams.intro || 0,
+            outro: streams.outro || 0,
           },
-        }));
-        console.log(contentEnvironment.stream);
-      } catch (error) {
-        console.error("Error fetching episode info:", error);
-        setContentEnvironment((prev) => ({
-          ...prev,
-          stream: {
-            ...prev.stream,
-            loadingStream: true,
-          },
-        }));
-      }
+        },
+      }));
+    } catch (error) {
+      console.error("Error fetching episode info:", error);
+      setContentEnvironment((prev) => ({
+        ...prev,
+        stream: {
+          ...prev.stream,
+          loadingStream: true,
+        },
+      }));
     }
   };
 
   useEffect(() => {
-    getEpisodeInfo();
-  }, [
-    ep,
-    episodes,
-    contentEnvironment.episode.loadingEpisode,
-    animeDataLoading,
-    preVideoControls.server,
-  ]);
+    const currentEpisodeId = contentEnvironment.episode.meta?.id;
+    if (currentEpisodeId) {
+      getEpisodeInfo(currentEpisodeId);
+    }
+  }, [ep, contentEnvironment.episode.meta, animeDataLoading]);
 
   useEffect(() => {
     if (animeDataLoading) return;

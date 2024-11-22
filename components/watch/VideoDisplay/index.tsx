@@ -80,8 +80,6 @@ export default function VideoDisplay(props: VideoDisplayProps) {
                   />
                 );
               })}
-
-
             </MediaPlayer>
           )}
         </div>

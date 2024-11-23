@@ -1,6 +1,4 @@
-import {
-  IAnimeResult,
-} from "@consumet/extensions";
+import { IAnimeResult } from "@consumet/extensions";
 import { FaArrowRight, FaArrowLeft, FaLine } from "react-icons/fa";
 import { useRef } from "react";
 import { ContentCard } from "../../misc/ContentCard/ContentCard";
@@ -27,23 +25,23 @@ export default function ContentTable(props: {
         </div>
         <div className="flex justify-center items-center px-1 md:px-6 p-2 w-full h-full md:h-80">
           <div
-            className="flex gap-20 w-full h-full md:h-fit overflow-hidden"
+            className="flex gap-20 w-full h-full md:h-fit overflow-hidden overflow-x-scroll md:overflow-x-hidden"
             ref={scrollRef}
           >
             {props?.data?.map((cardInfo: IAnimeResult) => {
               return (
-               <div className="flex justify-center items-center h-full">
-                 <ContentCard
-                  {...cardInfo}
-                  cardType={props.type}
-                  key={cardInfo.id}
-                />
-               </div>
+                <div className="flex justify-center items-center h-full">
+                  <ContentCard
+                    {...cardInfo}
+                    cardType={props.type}
+                    key={cardInfo.id}
+                  />
+                </div>
               );
             })}
           </div>
 
-          <div className="flex flex-col items-center gap-3 py-4 p-2 h-full">
+          <div className="md:flex flex-col items-center gap-3 hidden py-4 p-2 h-full">
             <button
               className="h-1/2 btn btn-square"
               onClick={() => scroll("right")}

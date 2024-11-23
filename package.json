@@ -17,6 +17,7 @@
     "@types/ms": "^0.7.34",
     "@types/react-plyr": "^2.1.4",
     "@vidstack/react": "^1.12.12",
+    "artplayer": "^5.2.1",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.7",
     "daisyui": "^4.12.14",

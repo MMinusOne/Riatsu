@@ -138,7 +138,6 @@ export default function WatchPageContent({
     if (!episodeId) return;
 
     try {
-      console.log(contentEnvironment.episode.meta);
       const { data: streams } = await axios.post(
         `/api/anime/episodes/stream/`,
         {
@@ -289,7 +288,6 @@ export default function WatchPageContent({
                     "ep",
                     nextEpisodeNumber.toString()
                   );
-                  console.log(currentUrl.toString());
                   router.push(currentUrl.toString());
                 }}
                 onClickPrevious={() => {

@@ -25,9 +25,9 @@ export async function POST(request: Request) {
 
       if (episodeSubOrDub === "both") {
         dubEpisodes.push({ ...episode, id: `${episodeId}$dub` });
-        subEpisodes.push({ ...episode, id: `${episodeId}$sub` });
+        subEpisodes.push({ ...episode, id: `${episodeId}$both` });
       } else if (episodeSubOrDub === "sub") {
-        subEpisodes.push({ ...episode, id: `${episodeId}$sub` });
+        subEpisodes.push({ ...episode, id: `${episodeId}$both` });
       }
     }
     let anilistInfo = {};

@@ -61,7 +61,11 @@ export default function WatchPageContent({
       videoControls: {
         autoSkipIntro: preVideoControls.autoSkipIntro,
         autoSkipOutro: preVideoControls.autoSkipOutro,
-        server: preVideoControls.server || servers.VIDCLOUD_SUB,
+        server: Object.values(servers).find(
+          (e) => preVideoControls.server.id === e.id
+        )
+          ? preVideoControls.server
+          : servers.VIDCLOUD_SUB,
       },
     });
 

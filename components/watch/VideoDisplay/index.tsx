@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import Artplayer from "artplayer";
 import Hls from "hls.js";
 import { VideoDisplayProps } from "@/types";
+import colors from "@/constants/colors";
 
 export default function VideoDisplay(props: VideoDisplayProps) {
   const { contentEnvironment, animeData } = props;
@@ -111,7 +112,7 @@ export default function VideoDisplay(props: VideoDisplayProps) {
       subtitle: {
         type: "vtt",
         style: {
-          color: "#fff",
+          color: colors.subtitles,
           fontSize: "20px",
         },
         encoding: "utf-8",
@@ -165,8 +166,6 @@ export default function VideoDisplay(props: VideoDisplayProps) {
       ],
     });
 
-    // Add subtitle switching control
-    // Add time update listener for intro/outro skipping
     art.on("video:timeupdate", () => {
       handleTimeUpdate(art.currentTime);
     });

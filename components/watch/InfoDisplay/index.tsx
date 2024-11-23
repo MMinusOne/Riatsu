@@ -25,7 +25,7 @@ export default function InfoDisplay(props: InfoDisplayProps) {
           </div>
         </div>
         <div className="lg:flex-row flex-col p-4 lg:p-0 w-full h-none">
-          <p className="mt-4 p-4 lg:p-1 text-sm">
+          <p className="mt-4 p-4 lg:p-1 text-ellipsis text-sm whitespace-nowrap overflow-hidden">
             <span
               dangerouslySetInnerHTML={{ __html: animeData.description }}
             ></span>

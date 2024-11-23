@@ -18,7 +18,7 @@ const useVideoControlsStore = create(
     (set) => ({
       autoSkipIntro: false,
       autoSkipOutro: false,
-      server: servers.ZORO_SUB,
+      server: servers.VIDSTREAMING_SUB,
       setAutoSkipIntro: (value) => set({ autoSkipIntro: value }),
       setAutoSkipOutro: (value) => set({ autoSkipOutro: value }),
       setServer: (value: SERVER_NAME) => set({ server: value }),

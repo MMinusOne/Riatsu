@@ -5,6 +5,8 @@ import "@/styles/globals.scss";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ThemeModal from "@/components/misc/ThemeModal";
 
+import { Analytics } from "@vercel/analytics/react";
+
 const queryClient = new QueryClient();
 
 export default function RootLayout({
@@ -36,6 +38,7 @@ export default function RootLayout({
       </head>
 
       <body className="m-0 p-0 w-full h-full">
+        <Analytics />
         <QueryClientProvider client={queryClient}>
           <ThemeModal themeStore={themeStore} />
           {children}

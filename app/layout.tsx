@@ -3,7 +3,7 @@
 import useThemeStore from "@/components/state/themeStore";
 import "@/styles/globals.scss";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import themes from "@/constants/themes"; // Import themes
+import themes from "@/constants/themes";
 
 const queryClient = new QueryClient();
 
@@ -33,9 +33,10 @@ export default function RootLayout({
         />
         <meta name="keywords" content="anime, streaming, watch, episodes" />
         <meta name="author" content="MMinusZero" />
-        <meta property="og:image" content="/assets/logo_full.png" />
+        <meta property="og:image" content="/assets/logo_small.png" />
         <link rel="manifest" href="/manifest.json" />
         <title>Riatsu</title>
+        <link rel="icon" href="/assets/favicon.ico" /> {/* Added favicon */}
       </head>
 
       <body className="m-0 p-0 w-full h-full">
@@ -56,7 +57,19 @@ export default function RootLayout({
               </div>
             </div>
             <form method="dialog" className="modal-backdrop">
-              <button>close</button>
+              <button
+                type="button"
+                className="btn"
+                onClick={() => {
+                  const modal = document.getElementById(
+                    "theme_modal"
+                  ) as HTMLDialogElement;
+                  if (!modal) return;
+                  modal.close();
+                }}
+              >
+                Close
+              </button>{" "}
             </form>
           </dialog>
           {children}

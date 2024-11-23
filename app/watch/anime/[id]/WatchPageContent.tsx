@@ -114,7 +114,7 @@ export default function WatchPageContent({
         setEpisodes(subEpisodes);
         break;
     }
-  }, [animeData, animeDataLoading, preVideoControls]);
+  }, [animeData, animeDataLoading, preVideoControls.server]);
 
   useEffect(() => {
     const stream = contentEnvironment?.stream;

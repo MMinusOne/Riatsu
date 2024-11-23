@@ -5,7 +5,7 @@ export default function InfoDisplay(props: InfoDisplayProps) {
   const { animeData } = props;
   return (
     <>
-      <div className="lg:block flex md:flex-row flex-col bg-base-200 p-4 rounded-lg w-full lg:w-80 h-none md:h-full">
+      <div className="lg:block flex md:flex-row flex-col bg-base-200 p-4 rounded-lg w-full lg:w-80 h-none md:h-full lg:h-screen">
         <div className="lg:flex-row flex-col w-full">
           <img
             src={animeData.image}
@@ -13,7 +13,7 @@ export default function InfoDisplay(props: InfoDisplayProps) {
             className="opacity-90 rounded-lg w-full h-72 object-cover"
           />
           <h2 className="mt-4 font-bold text-xl">
-            { /**@ts-ignore */}
+            {/**@ts-ignore */}
             {animeData?.title!?.english! || animeData.title}
           </h2>
           <div className="flex flex-wrap gap-2 mt-2">
@@ -24,7 +24,7 @@ export default function InfoDisplay(props: InfoDisplayProps) {
             ))}
           </div>
         </div>
-        <div className="lg:flex-row flex-col p-4 lg:p-0 w-full h-full">
+        <div className="lg:flex-row flex-col p-4 lg:p-0 w-full h-none">
           <p className="mt-4 p-4 lg:p-1 text-sm">
             <span
               dangerouslySetInnerHTML={{ __html: animeData.description }}

@@ -25,7 +25,7 @@ export default function Home() {
     <>
       <div className="flex flex-col gap-3">
         <Header />
-        {spotlightAnimeLoading ? null : <Banner data={spotlightAnimes} />}
+        <Banner data={spotlightAnimeLoading ? [] : spotlightAnimes} />
 
         <div className="flex flex-col gap-4 p-4 min-h-1/2">
           {!trendingAnimeLoading && trendingAnimes ? (

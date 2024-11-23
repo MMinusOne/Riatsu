@@ -172,7 +172,6 @@ export default function VideoDisplay(props: VideoDisplayProps) {
 
     playerRef.current = art;
 
-    // Cleanup
     return () => {
       if (art && art.destroy) {
         art.destroy(false);

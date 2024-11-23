@@ -5,9 +5,9 @@ export default function EpisodeDisplay(props: EpisodeDisplayProps) {
   if (!episodesData) return <></>;
   return (
     <>
-      <div className="bg-base-200 rounded-lg w-full md:w-72 h-1/2 md:h-screen max-h-72 md:max-h-none">
-        <div className="bg-base-300 p-4 w-full h-full">
-          <div className="w-full max-h-full overflow-hidden overflow-y-auto join join-vertical">
+      <div className="bg-base-200 rounded-lg w-full md:w-72 h-[40rem] md:h-screen overflow-hidden">
+        <div className="bg-base-300 p-4 w-full h-full overflow-y-auto">
+          <div className="w-full max-h-full join join-vertical">
             {episodesData.map((episodeData, episodeIndex) => (
               <button
                 key={episodeIndex}

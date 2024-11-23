@@ -61,7 +61,7 @@ export default function WatchPageContent({
       videoControls: {
         autoSkipIntro: preVideoControls.autoSkipIntro,
         autoSkipOutro: preVideoControls.autoSkipOutro,
-        server: preVideoControls.server,
+        server: preVideoControls.server || servers.VIDCLOUD_SUB,
       },
     });
 
@@ -142,6 +142,7 @@ export default function WatchPageContent({
         `/api/anime/episodes/stream/`,
         {
           episodeId,
+          server: preVideoControls.server.serverDefinition,
         }
       );
       setContentEnvironment((prev) => ({

@@ -1,33 +1,38 @@
 import { SERVER_NAMES, SUB_OR_DUB } from "@/types";
+import { StreamingServers } from '@consumet/extensions';
 
 const servers: SERVER_NAMES = {
-  ZORO_SUB: {
-    id: "ZORO_SUB",
-    name: "Zoro",
+  VIDSTREAMING_SUB: {
+    id: "VIDSTREAMING_SUB",
+    name: "VidStreaming",
+    serverDefinition: StreamingServers.VidStreaming,
     typeName: "Sub",
     SUB_OR_DUB: SUB_OR_DUB.SUB,
     available: true,
   },
-  GOGO_SUB: {
-    id: "GOGO_SUB",
-    name: "Gogo",
+  VIDCLOUD_SUB: {
+    id: "VIDCLOUD_SUB",
+    serverDefinition: StreamingServers.VidCloud,
+    name: "Vidcloud",
     typeName: "Sub",
     SUB_OR_DUB: SUB_OR_DUB.SUB,
-    available: false,
+    available: true,
   },
-  ZORO_DUB: {
-    id: "ZORO_DUB",
-    name: "Zoro",
+  VIDSTREAMING_DUB: {
+    id: "VIDSTREAMING_DUB",
+    name: "VidStreaming",
+    serverDefinition: StreamingServers.VidStreaming,
     typeName: "Dub",
     SUB_OR_DUB: SUB_OR_DUB.DUB,
     available: true,
   },
-  GOGO_DUB: {
-    id: "GOGO_DUB",
-    name: "Gogo",
+  VIDCLOUD_DUB: {
+    id: "VIDCLOUD_DUB",
+    name: "Vidcloud",
+    serverDefinition: StreamingServers.VidCloud,
     typeName: "Dub",
     SUB_OR_DUB: SUB_OR_DUB.DUB,
-    available: false,
+    available: true,
   },
 };
 

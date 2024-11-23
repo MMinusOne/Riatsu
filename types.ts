@@ -1,4 +1,4 @@
-import { IAnimeResult } from "@consumet/extensions";
+import { IAnimeResult, StreamingServers } from "@consumet/extensions";
 
 export declare type ContentEnvironmentState =
   | {
@@ -61,6 +61,7 @@ export interface EpisodeControls {
 export interface SERVER_NAME {
   id: string;
   name: string;
+  serverDefinition: StreamingServers;
   typeName: string;
   SUB_OR_DUB: SUB_OR_DUB;
   available: boolean;

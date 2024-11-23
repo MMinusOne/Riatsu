@@ -6,7 +6,8 @@ import axios, { HttpStatusCode } from "axios";
 const zoroAnime = new consumet.ANIME.Zoro();
 
 export async function POST(request: Request) {
-  const { episodeId } = await request.json();
+  const { episodeId, server = consumet.StreamingServers.VidCloud } =
+    await request.json();
 
   if (!episodeId) {
     return NextResponse.json(
@@ -17,7 +18,10 @@ export async function POST(request: Request) {
 
   try {
     // const episodeSource = await gogoAnime.fetchEpisodeSources(episodeId);
-    const episodeSource = await zoroAnime.fetchEpisodeSources(episodeId);
+    const episodeSource = await zoroAnime.fetchEpisodeSources(
+      episodeId,
+      server
+    );
     return NextResponse.json(episodeSource);
   } catch (e) {
     console.log(e);

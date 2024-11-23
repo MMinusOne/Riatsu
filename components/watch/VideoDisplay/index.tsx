@@ -88,6 +88,8 @@ export default function VideoDisplay(props: VideoDisplayProps) {
               const levels = hls.levels.map((level) => ({
                 html: `${level.height}p`,
                 value: level.height,
+                default:
+                  level.height === Math.min(...hls.levels.map((l) => l.height)),
               }));
 
               // Update the quality selector

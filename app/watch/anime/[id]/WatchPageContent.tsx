@@ -42,7 +42,11 @@ export default function WatchPageContent({
     queryKey: ["info", id],
     queryFn: () => getAnimeInfo(id),
   });
-
+   console.log(Object.values(servers).find(
+    (e) => preVideoControls.server.id === e.id
+  )
+    ? preVideoControls.server
+    : servers.VIDCLOUD_SUB);
   const [contentEnvironment, setContentEnvironment] =
     useState<ContentEnvironmentState>({
       episode: {

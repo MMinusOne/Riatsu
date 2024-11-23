@@ -85,7 +85,6 @@ export default function VideoDisplay(props: VideoDisplayProps) {
 
             // Handle quality switching
             hls.on(Hls.Events.MANIFEST_PARSED, function () {
-              console.log(hls.levels);
               const levels = hls.levels.map((level) => ({
                 html: `${level.height}p`,
                 value: level.height,
@@ -141,7 +140,6 @@ export default function VideoDisplay(props: VideoDisplayProps) {
               return "Off";
             } else {
               art.subtitle.show = true;
-              console.log(subtitle);
               art.subtitle.switch(subtitle.value);
               return subtitle.html;
             }

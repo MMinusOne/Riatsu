@@ -34,6 +34,7 @@ export default function RootLayout({
         <meta name="keywords" content="anime, streaming, watch, episodes" />
         <meta name="author" content="MMinusZero" />
         <meta property="og:image" content="/assets/logo_full.png" />
+        <link rel="manifest" href="/manifest.json" />
         <title>Riatsu</title>
       </head>
 

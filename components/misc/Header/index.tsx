@@ -90,7 +90,6 @@ export default function Header() {
           <button
             onClick={() => {
               setSearchEnabled(!searchEnabled);
-              console.log(searchEnabled);
             }}
             className="flex md:hidden btn btn-outline btn-square"
           >

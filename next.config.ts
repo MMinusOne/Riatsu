@@ -1,4 +1,7 @@
 import type { NextConfig } from "next";
+const withPWA = require("next-pwa")({
+  dest: "public",
+});
 
 const nextConfig: NextConfig = {
   images: {
@@ -9,7 +12,7 @@ const nextConfig: NextConfig = {
       { hostname: "artworks.thetvdb.com" },
       { hostname: "media.kitsu.app" },
       { hostname: "mangadex.org" },
-      { hostname: "cdn.noitatnemucod.net" }
+      { hostname: "cdn.noitatnemucod.net" },
     ],
   },
   env: {
@@ -17,4 +20,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withPWA(nextConfig);

@@ -1,3 +1,3 @@
-const themes = ["black", "sunset", "nord", "white"];
+const themes = ["black", "sunset", "nord", "light"];
 
 export default themes;

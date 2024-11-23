@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss";
-const themes = ["black", "sunset", "nord", "white"];
+const themes = ["black", "sunset", "nord", "light"];
 
 const config: Config = {
   content: [

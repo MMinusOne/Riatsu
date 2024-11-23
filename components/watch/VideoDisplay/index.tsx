@@ -142,13 +142,15 @@ export default function VideoDisplay(props: VideoDisplayProps) {
               value: subtitle.url,
             })),
           ],
-          onSelect: function (item) {
-            if (item.value === "off") {
+          onSelect: function (subtitle) {
+            if (subtitle.value === "off") {
               art.subtitle.show = false;
+              return "Off";
             } else {
               art.subtitle.show = true;
-              console.log(item);
-              art.subtitle.switch(item.value);
+              console.log(subtitle);
+              art.subtitle.switch(subtitle.value);
+              return subtitle.html;
             }
           },
         },
@@ -159,13 +161,13 @@ export default function VideoDisplay(props: VideoDisplayProps) {
           html: "Quality",
           tooltip: "Select Quality",
           selector: [], // This will be populated when HLS manifest is parsed
-          onSelect: (name) => {
-            console.log(name);
-            const { value: height } = name;
+          onSelect: (quality) => {
+            const { value: height, html } = quality;
             const levelIndex = hls.levels.findIndex(
               (level) => level.height === height
             );
             hls.currentLevel = levelIndex;
+            return html;
           },
         },
       ],

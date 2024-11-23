@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-interface ThemeState {
+export interface ThemeState {
   theme: string;
   setTheme: (theme: string) => void;
 }

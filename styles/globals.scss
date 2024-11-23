@@ -2,16 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-*, *::before, *::after { 
-    transition: all 0.05ms linear;
-    box-sizing: border-box;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-::selection { 
-    @apply bg-secondary opacity-60
+::selection {
+  @apply bg-secondary bg-opacity-60;
 }
-
 
 ::-webkit-scrollbar-track {
-    @apply bg-transparent;
+  @apply bg-transparent;
 }

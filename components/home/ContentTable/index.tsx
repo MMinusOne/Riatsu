@@ -1,9 +1,5 @@
-import NextImage from "next/image";
 import {
-  ISearch,
   IAnimeResult,
-  IMangaResult,
-  IMovieResult,
 } from "@consumet/extensions";
 import { FaArrowRight, FaArrowLeft, FaLine } from "react-icons/fa";
 import { useRef } from "react";

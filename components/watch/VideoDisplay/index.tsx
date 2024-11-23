@@ -50,7 +50,6 @@ export default function VideoDisplay(props: VideoDisplayProps) {
       container: artRef.current,
       url: contentEnvironment.stream.proxiedStream,
       type: "m3u8",
-      title: contentEnvironment.episode.meta?.title,
       poster: animeData.cover,
       volume: 0.5,
       isLive: false,
@@ -76,7 +75,6 @@ export default function VideoDisplay(props: VideoDisplayProps) {
       airplay: true,
       theme: "#23ade5",
       lang: navigator.language.toLowerCase(),
-      whitelist: ["*"],
 
       customType: {
         m3u8: function (video: HTMLVideoElement, url: string) {
@@ -97,12 +95,6 @@ export default function VideoDisplay(props: VideoDisplayProps) {
                 name: "Quality",
                 selector: levels,
               });
-
-              // Set default quality to highest
-              const defaultQuality = Math.max(
-                ...hls.levels.map((l) => l.height)
-              );
-              art.setting.value("Quality", defaultQuality);
             });
 
             // Handle quality changes

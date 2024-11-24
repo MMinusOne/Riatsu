@@ -19,6 +19,7 @@ export default function ContentCard(props: IAnimeResult) {
             style={{ transform: "rotate(-90deg)" }}
             className="w-full font-semibold text-center text-lg whitespace-nowrap"
           >
+            { /**@ts-ignore */}
             {props.title}
           </p>
           <div className="flex justify-center items-center opacity-90 w-full font-bold text-primary text-xl aspect-square">

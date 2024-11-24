@@ -1,7 +1,7 @@
 import { IAnimeResult } from "@consumet/extensions";
 import { FaArrowRight, FaArrowLeft, FaLine } from "react-icons/fa";
 import { useRef } from "react";
-import { ContentCard } from "../../misc/ContentCard/ContentCard";
+import ContentCard from "../ContentCard";
 
 export default function ContentTable(props: {
   title: string;
@@ -12,29 +12,35 @@ export default function ContentTable(props: {
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
-      const scrollAmount = direction === "right" ? 200 : -200; // Adjust scroll amount as needed
+      const scrollAmount = direction === "right" ? 300 : -300;
       scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
     }
   };
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center gap-0 h-96">
+      <div className="flex flex-col justify-center items-center gap-4 h-full">
+        
         <div className="flex items-start p-2 w-full">
           <p className="font-semibold text-xl md:text-2xl">{props.title}</p>
         </div>
-        <div className="flex justify-center items-center px-1 md:px-6 p-2 w-full h-full md:h-80">
+
+        <div className="flex justify-center items-center gap-1 px-1 md:px-6 p-2 w-full h-full">
+
           <div
-            className="flex gap-20 w-full h-full md:h-fit overflow-hidden overflow-x-scroll md:overflow-x-hidden"
+            className="flex gap-20 w-full h-full overflow-hidden overflow-x-scroll md:overflow-x-hidden"
             ref={scrollRef}
           >
-            {props?.data?.map((cardInfo: IAnimeResult) => {
+            {props?.data?.map((cardInfo: IAnimeResult, cardIndex) => {
               return (
-                <div className="flex justify-center items-center h-full">
+                <div
+                  className="flex justify-center items-center h-[22rem]"
+                  key={cardInfo.id}
+                >
                   <ContentCard
                     {...cardInfo}
+                    cardIndex={cardIndex}
                     cardType={props.type}
-                    key={cardInfo.id}
                   />
                 </div>
               );
@@ -43,13 +49,13 @@ export default function ContentTable(props: {
 
           <div className="md:flex flex-col items-center gap-3 hidden py-4 p-2 h-full">
             <button
-              className="h-1/2 btn btn-square"
+              className="h-32 btn btn-square"
               onClick={() => scroll("right")}
             >
               <FaArrowRight />
             </button>
             <button
-              className="h-1/2 btn btn-square"
+              className="h-32 btn btn-square"
               onClick={() => scroll("left")}
             >
               <FaArrowLeft />

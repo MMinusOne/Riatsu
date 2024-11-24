@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ThemeModal from "@/components/misc/ThemeModal";
 
 import { Analytics } from "@vercel/analytics/react";
+import keywords from "@/constants/keywords";
 
 const queryClient = new QueryClient();
 
@@ -29,7 +30,7 @@ export default function RootLayout({
           name="description"
           content="A free platform to watch and explore anime."
         />
-        <meta name="keywords" content="anime, streaming, watch, episodes" />
+        <meta name="keywords" content={keywords.join(', ')} />
         <meta name="author" content="MMinusZero" />
         <meta property="og:image" content="/assets/logo_small.png" />
         <link rel="manifest" href="/manifest.json" />

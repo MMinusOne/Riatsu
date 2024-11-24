@@ -3,7 +3,7 @@ import NextImage from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
-export function ContentCard(props: IAnimeResult) {
+export default function ContentCard(props: IAnimeResult) {
   if (!props.image) return <></>;
   const [cardImageLoaded, setCardImageLoaded] = useState(false);
 

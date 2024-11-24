@@ -27,7 +27,7 @@ export default function Home() {
         <Header />
         <Banner data={spotlightAnimeLoading ? [] : spotlightAnimes} />
 
-        <div className="flex flex-col gap-4 p-4 min-h-1/2">
+        <div className="flex flex-col gap-4 p-4 h-full">
           {!trendingAnimeLoading && trendingAnimes ? (
             <>
               <ContentTable

@@ -17,7 +17,7 @@ export default function VideoDisplay(props: VideoDisplayProps) {
       if (!contentEnvironment.stream.meta || !playerRef.current) return;
 
       const { intro, outro } = contentEnvironment.stream.meta;
-      console.log({ currentTime, intro, outro })
+
       if (
         intro &&
         currentTime >= intro.start &&

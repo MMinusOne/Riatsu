@@ -5,9 +5,6 @@ import { useState } from "react";
 
 export default function ContentCard(props: IAnimeResult) {
   if (!props.image) return <></>;
-  console.log(props);
-  const [cardImageLoaded, setCardImageLoaded] = useState(false);
-
   return (
     <>
       <Link

@@ -30,12 +30,17 @@ export default function RootLayout({
           name="description"
           content="A free platform to watch and explore anime."
         />
-        <meta name="keywords" content={keywords.join(', ')} />
+        <meta name="keywords" content={keywords.join(", ")} />
         <meta name="author" content="MMinusZero" />
         <meta property="og:image" content="/assets/logo_small.png" />
         <link rel="manifest" href="/manifest.json" />
         <title>Riatsu</title>
-        <link rel="icon" href="/assets/favicon.ico" /> {/* Added favicon */}
+        <link rel="icon" href="/assets/favicon.ico" />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8095918076612003"
+          crossOrigin="anonymous"
+        ></script>
       </head>
 
       <body className="m-0 p-0 w-full h-full">

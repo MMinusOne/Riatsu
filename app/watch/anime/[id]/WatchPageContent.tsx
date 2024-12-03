@@ -31,9 +31,7 @@ export default function WatchPageContent({
   const preVideoControls = useVideoControlsStore();
 
   useEffect(() => {
-    if (!id) {
-      router.push("/");
-    } else if (!ep || !Number(ep) || ep <= 0) {
+    if (!id || !ep || ep <= 0) {
       router.push(`/watch/anime/${id}?ep=1`);
     }
   }, [id, ep, router]);
@@ -43,31 +41,26 @@ export default function WatchPageContent({
     queryFn: () => getAnimeInfo(id),
   });
 
-  const [contentEnvironment, setContentEnvironment] =
-    useState<ContentEnvironmentState>({
-      episode: {
-        loadingEpisode: true,
-        meta: null,
-        episodeIndex: null,
-      },
-      stream: {
-        loadingStream: true,
-        meta: null,
-        proxiedStream: null,
-        currentStream: null,
-        streams: [],
-        subtitles: [],
-      },
-      videoControls: {
-        autoSkipIntro: preVideoControls.autoSkipIntro,
-        autoSkipOutro: preVideoControls.autoSkipOutro,
-        server: Object.values(servers).find(
-          (e) => preVideoControls?.server?.id === e.id
-        )
-          ? preVideoControls.server
-          : servers.VIDCLOUD_SUB,
-      },
-    });
+  const [contentEnvironment, setContentEnvironment] = useState<ContentEnvironmentState>({
+    episode: {
+      loadingEpisode: true,
+      meta: null,
+      episodeIndex: null,
+    },
+    stream: {
+      loadingStream: true,
+      meta: null,
+      proxiedStream: null,
+      currentStream: null,
+      streams: [],
+      subtitles: [],
+    },
+    videoControls: {
+      autoSkipIntro: preVideoControls.autoSkipIntro,
+      autoSkipOutro: preVideoControls.autoSkipOutro,
+      server: preVideoControls.server?.id ? preVideoControls.server : servers.VIDCLOUD_SUB,
+    },
+  });
 
   const [episodes, setEpisodes] = useState([]);
 
@@ -75,57 +68,36 @@ export default function WatchPageContent({
     if (episodes.length > 0 && !episodes.at(ep)) {
       router.push(`/watch/anime/${id}?ep=1`);
     }
-  }, [id, episodes]);
+  }, [id, episodes, ep, router]);
 
   useEffect(() => {
     if (animeDataLoading) return;
     const { server } = preVideoControls;
     if (!server.available) return;
+
     setContentEnvironment((prev) => ({
-      episode: {
-        loadingEpisode: true,
-        meta: null,
-        episodeIndex: null,
-      },
-      stream: {
-        loadingStream: true,
-        meta: null,
-        proxiedStream: null,
-        currentStream: null,
-        streams: [],
-        subtitles: [],
-      },
+      ...prev,
       videoControls: {
         ...prev.videoControls,
         server,
       },
     }));
-    setEpisodes([]);
+
     const { subEpisodes, dubEpisodes } = animeData;
-    switch (server.SUB_OR_DUB) {
-      case SUB_OR_DUB.DUB:
-        setEpisodes(dubEpisodes);
-        break;
-      case SUB_OR_DUB.SUB:
-        setEpisodes(subEpisodes);
-        break;
-    }
+    setEpisodes(server.SUB_OR_DUB === SUB_OR_DUB.DUB ? dubEpisodes : subEpisodes);
   }, [animeData, animeDataLoading, preVideoControls.server]);
 
   useEffect(() => {
-    const stream = contentEnvironment?.stream;
-    if (!stream?.currentStream) return;
+    const stream = contentEnvironment.stream;
+    if (!stream.currentStream) return;
+
     const { url: streamUrl } = stream.currentStream;
     if (!streamUrl) return;
 
-    const proxySearchParams = new URLSearchParams();
-    proxySearchParams.set("url", streamUrl);
-    proxySearchParams.set(
-      "headers",
-      JSON.stringify({
-        referrer: "https://hianime.to",
-      })
-    );
+    const proxySearchParams = new URLSearchParams({
+      url: streamUrl,
+      headers: JSON.stringify({ referrer: "https://hianime.to" }),
+    });
 
     const proxiedStream = `${process.env.NEXT_M3U8_PROXY}/m3u8-proxy?${proxySearchParams}`;
 
@@ -142,13 +114,10 @@ export default function WatchPageContent({
     if (!episodeId) return;
 
     try {
-      const { data: streams } = await axios.post(
-        `/api/anime/episodes/stream/`,
-        {
-          episodeId,
-          server: preVideoControls.server.serverDefinition,
-        }
-      );
+      const { data: streams } = await axios.post(`/api/anime/episodes/stream/`, {
+        episodeId,
+        server: preVideoControls.server.serverDefinition,
+      });
       setContentEnvironment((prev) => ({
         ...prev,
         stream: {
@@ -194,16 +163,11 @@ export default function WatchPageContent({
       ...prev,
       episode: {
         loadingEpisode: false,
-        episodeIndex: episodeIndex,
+        episodeIndex,
         meta: episodeData,
       },
-      videoControls: {
-        autoSkipIntro: preVideoControls.autoSkipIntro,
-        autoSkipOutro: preVideoControls.autoSkipOutro,
-        server: preVideoControls.server,
-      },
     }));
-  }, [animeData, episodes, animeDataLoading, ep, id, router, preVideoControls]);
+  }, [animeData, episodes, animeDataLoading, ep, id, router]);
 
   if (animeDataLoading) {
     return <Loading headless={true} />;
@@ -211,14 +175,13 @@ export default function WatchPageContent({
 
   return (
     <div className="relative min-h-screen">
-      <div className="absolute w-full h-full overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-t from-base-200/90 via-base-100/60 to-transparent" />
+      <div className="absolute inset-0 overflow-hidden">
         <NextImage
           unoptimized
           src={animeData.anilistInfo?.cover || animeData.zoroInfo?.image}
           fill
           alt="Background"
-          className="absolute inset-0 opacity-20 blur-xl w-full h-full object-cover scale-110"
+          className="absolute inset-0 opacity-20 blur-xl object-cover scale-110"
         />
       </div>
 
@@ -226,50 +189,34 @@ export default function WatchPageContent({
         <div className="p-4 text-sm breadcrumbs">
           <ul>
             <li>
-              <a>{animeData.zoroInfo.title}</a>
+              <a>{animeData?.zoroInfo?.title}</a>
             </li>
-            {contentEnvironment.episode.episodeIndex !== null ? (
-              <li>Episode. {contentEnvironment.episode.episodeIndex + 1}</li>
-            ) : null}
+            {contentEnvironment.episode.episodeIndex !== null && (
+              <li>Episode {contentEnvironment.episode.episodeIndex + 1}</li>
+            )}
           </ul>
         </div>
 
         <div className="flex lg:flex-row flex-col gap-4 p-4">
-          <div className="flex md:flex-row flex-col-reverse gap-[inherit] w-full">
-            {episodes.length && !contentEnvironment.episode.loadingEpisode ? (
+          <div className="flex md:flex-row flex-col-reverse gap-4 w-full">
+            {episodes.length && !contentEnvironment.episode.loadingEpisode && (
               <EpisodeDisplay
                 episodesData={episodes}
                 selectedEpisode={contentEnvironment.episode}
-                onEpisodeSelect={(
-                  episodeData: PostiveEpisodeMeta,
-                  episodeIndex: number
-                ) => {
-                  if (episodeIndex === contentEnvironment.episode.episodeIndex)
-                    return;
+                onEpisodeSelect={(episodeData, episodeIndex) => {
+                  if (episodeIndex === contentEnvironment.episode.episodeIndex) return;
                   setContentEnvironment((prev) => ({
+                    ...prev,
                     episode: {
                       loadingEpisode: true,
                       meta: null,
                       episodeIndex: null,
                     },
-                    stream: {
-                      loadingStream: true,
-                      meta: null,
-                      proxiedStream: null,
-                      currentStream: null,
-                      streams: [],
-                      subtitles: [],
-                    },
-                    videoControls: {
-                      autoSkipIntro: preVideoControls.autoSkipIntro,
-                      autoSkipOutro: preVideoControls.autoSkipOutro,
-                      server: preVideoControls.server,
-                    },
                   }));
                   router.push(`/watch/anime/${id}?ep=${episodeIndex + 1}`);
                 }}
               />
-            ) : null}
+            )}
 
             <div className="flex-1">
               <VideoDisplay
@@ -278,33 +225,19 @@ export default function WatchPageContent({
               />
               <ConfigurationDisplay
                 contentEnvironment={contentEnvironment}
-                onSelectAutoSkipIntro={(selected) => {
-                  preVideoControls.setAutoSkipIntro(selected);
-                }}
-                onSelectAutoSkipOutro={(selected) => {
-                  preVideoControls.setAutoSkipOutro(selected);
-                }}
+                onSelectAutoSkipIntro={preVideoControls.setAutoSkipIntro}
+                onSelectAutoSkipOutro={preVideoControls.setAutoSkipOutro}
                 onClickNext={() => {
                   if (contentEnvironment.episode.loadingEpisode) return;
-                  const currentUrl = new URL(window.location.href);
                   const nextEpisodeNumber = Number(ep) + 1;
                   if (!episodes.at(nextEpisodeNumber)) return;
-                  currentUrl.searchParams.set(
-                    "ep",
-                    nextEpisodeNumber.toString()
-                  );
-                  router.push(currentUrl.toString());
+                  router.push(`/watch/anime/${id}?ep=${nextEpisodeNumber}`);
                 }}
                 onClickPrevious={() => {
                   if (contentEnvironment.episode.loadingEpisode) return;
-                  const currentUrl = new URL(window.location.href);
                   const nextEpisodeNumber = Number(ep) - 1;
                   if (!episodes.at(nextEpisodeNumber)) return;
-                  currentUrl.searchParams.set(
-                    "ep",
-                    nextEpisodeNumber.toString()
-                  );
-                  router.push(currentUrl.toString());
+                  router.push(`/watch/anime/${id}?ep=${nextEpisodeNumber}`);
                 }}
               />
               <ServerDisplay

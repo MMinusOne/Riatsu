@@ -41,26 +41,29 @@ export default function WatchPageContent({
     queryFn: () => getAnimeInfo(id),
   });
 
-  const [contentEnvironment, setContentEnvironment] = useState<ContentEnvironmentState>({
-    episode: {
-      loadingEpisode: true,
-      meta: null,
-      episodeIndex: null,
-    },
-    stream: {
-      loadingStream: true,
-      meta: null,
-      proxiedStream: null,
-      currentStream: null,
-      streams: [],
-      subtitles: [],
-    },
-    videoControls: {
-      autoSkipIntro: preVideoControls.autoSkipIntro,
-      autoSkipOutro: preVideoControls.autoSkipOutro,
-      server: preVideoControls.server?.id ? preVideoControls.server : servers.VIDCLOUD_SUB,
-    },
-  });
+  const [contentEnvironment, setContentEnvironment] =
+    useState<ContentEnvironmentState>({
+      episode: {
+        loadingEpisode: true,
+        meta: null,
+        episodeIndex: null,
+      },
+      stream: {
+        loadingStream: true,
+        meta: null,
+        proxiedStream: null,
+        currentStream: null,
+        streams: [],
+        subtitles: [],
+      },
+      videoControls: {
+        autoSkipIntro: preVideoControls.autoSkipIntro,
+        autoSkipOutro: preVideoControls.autoSkipOutro,
+        server: preVideoControls.server?.id
+          ? preVideoControls.server
+          : servers.VIDCLOUD_SUB,
+      },
+    });
 
   const [episodes, setEpisodes] = useState([]);
 
@@ -84,7 +87,9 @@ export default function WatchPageContent({
     }));
 
     const { subEpisodes, dubEpisodes } = animeData;
-    setEpisodes(server.SUB_OR_DUB === SUB_OR_DUB.DUB ? dubEpisodes : subEpisodes);
+    setEpisodes(
+      server.SUB_OR_DUB === SUB_OR_DUB.DUB ? dubEpisodes : subEpisodes
+    );
   }, [animeData, animeDataLoading, preVideoControls.server]);
 
   useEffect(() => {
@@ -99,7 +104,11 @@ export default function WatchPageContent({
       headers: JSON.stringify({ referrer: "https://hianime.to" }),
     });
 
-    const proxiedStream = `${process.env.NEXT_M3U8_PROXY}/m3u8-proxy?${proxySearchParams}`;
+    const proxy =
+      process.env.NEXT_PUBLIC_ENVIRONMENT === "dev"
+        ? process.env.NEXT_PUBLIC_M3U8_DEV_PROXY
+        : process.env.NEXT_PUBLIC_M3U8_LIVE_PROXY;
+    const proxiedStream = `${proxy}/m3u8-proxy?${proxySearchParams}`;
 
     setContentEnvironment((prev) => ({
       ...prev,
@@ -114,10 +123,13 @@ export default function WatchPageContent({
     if (!episodeId) return;
 
     try {
-      const { data: streams } = await axios.post(`/api/anime/episodes/stream/`, {
-        episodeId,
-        server: preVideoControls.server.serverDefinition,
-      });
+      const { data: streams } = await axios.post(
+        `/api/anime/episodes/stream/`,
+        {
+          episodeId,
+          server: preVideoControls.server.serverDefinition,
+        }
+      );
       setContentEnvironment((prev) => ({
         ...prev,
         stream: {
@@ -204,7 +216,8 @@ export default function WatchPageContent({
                 episodesData={episodes}
                 selectedEpisode={contentEnvironment.episode}
                 onEpisodeSelect={(episodeData, episodeIndex) => {
-                  if (episodeIndex === contentEnvironment.episode.episodeIndex) return;
+                  if (episodeIndex === contentEnvironment.episode.episodeIndex)
+                    return;
                   setContentEnvironment((prev) => ({
                     ...prev,
                     episode: {

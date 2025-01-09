@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@builder.io/partytown':
+        specifier: ^0.10.2
+        version: 0.10.2
       '@consumet/extensions':
         specifier: ^1.8.1
         version: 1.8.1
@@ -771,6 +774,11 @@ packages:
   '@babel/types@7.26.0':
     resolution: {integrity: sha512-Z/yiTPj+lDVnF7lWeKCIJzaIkI0vYO87dMpZ4bg4TDrFe4XXLFWL1TbXU27gBP3QccxV9mZICCrnjnYlJjXHOA==}
     engines: {node: '>=6.9.0'}
+
+  '@builder.io/partytown@0.10.2':
+    resolution: {integrity: sha512-A9U+4PREWcS+CCYzKGIPovtGB/PBgnH/8oQyCE6Nr9drDJk6cMPpLQIEajpGPmG9tYF7N3FkRvhXm/AS9+0iKg==}
+    engines: {node: '>=18.0.0'}
+    hasBin: true
 
   '@consumet/extensions@1.8.1':
     resolution: {integrity: sha512-Khs65PGB2hIR+SaM3jA074gYMq5n6qItzBECp69AiKFzIMDzvRxlviupetnjgU0xgLkfbfb9OttQ/NTpowD/JQ==}
@@ -4777,6 +4785,8 @@ snapshots:
     dependencies:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
+
+  '@builder.io/partytown@0.10.2': {}
 
   '@consumet/extensions@1.8.1':
     dependencies:

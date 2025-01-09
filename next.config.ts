@@ -16,7 +16,6 @@ const nextConfig: NextConfig = {
     ],
   },
   env: {
-    NEXT_M3U8_PROXY: process.env.NEXT_M3U8_PROXY,
   },
 };
 
